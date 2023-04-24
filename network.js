@@ -22,7 +22,7 @@ Used to set the network: https://chainlist.org/
 338 Cronos Testnet
 */
 
-window.web3ChainId = 5;
+window.web3ChainId = 80001;
 
 // Onboard JS chain config objects
 
@@ -41,9 +41,9 @@ window.web3ChainId = 5;
 
 window.networks = [
   {
-    id: 5,
-    label: "Ethereum Goerli",
-    token: "goETH",
-    rpcUrl: `https://goerli.infura.io/v3/assdfsdf`,
-  }
-]
+    id: 80001,
+    label: "Polygon Testnet",
+    token: "MATIC",
+    rpcUrl: `https://polygon-mumbai.g.alchemy.com/v2/YtafewAs_gAgOyjlc0GmwcOszZNGAzQ2`,
+  },
+];
