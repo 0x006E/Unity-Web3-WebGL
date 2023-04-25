@@ -22,7 +22,7 @@ Used to set the network: https://chainlist.org/
 338 Cronos Testnet
 */
 
-window.web3ChainId = 8001;
+window.web3ChainId = 80001;
 
 // Onboard JS chain config objects
 
@@ -41,7 +41,7 @@ window.web3ChainId = 8001;
 
 window.networks = [
   {
-    id: 8001,
+    id: 80001,
     label: "Polygon Testnet",
     token: "MATIC",
     rpcUrl: `https://rpc-mumbai.maticvigil.com/v1/022fed917e36e7c1a9375de682288b4f16ff088f`,
