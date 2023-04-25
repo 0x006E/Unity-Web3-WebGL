@@ -27,16 +27,12 @@
     <script src="AgoraRTC_N.js"></script>
     <script src="AgoraWebSDK/libs/spatial-audio-main.js" type="module"></script>
     <script src="AgoraWebSDK/vendor/jquery.min.js"></script>
-    <script
-      type="module"
-      crossorigin
-      src="./assets/index-f9496d0e.js"
-      defer
-    ></script>
   </head>
+
   <body>
     <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width="960" height="600"></canvas>
+        <canvas id="unity-canvas" width=960 height=600></canvas>
+      </canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
@@ -80,14 +76,6 @@
         </div>
       </div>
     </div>
-    <script>
-      document.body.appendChild(
-        Object.assign(document.createElement("script"), {
-          type: "text/javascript",
-          src: "./network.js",
-        })
-      );
-    </script>
 
     <script>
       var unityInstance;
@@ -114,17 +102,14 @@
       // user.
       function unityShowBanner(msg, type) {
         function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length
-            ? "block"
-            : "none";
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
         }
-        var div = document.createElement("div");
+        var div = document.createElement('div');
         div.innerHTML = msg;
         warningBanner.appendChild(div);
-        if (type == "error") div.style = "background: red; padding: 10px;";
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
         else {
-          if (type == "warning")
-            div.style = "background: yellow; padding: 10px;";
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
           setTimeout(function () {
             warningBanner.removeChild(div);
             updateBannerVisibility();
@@ -158,7 +143,7 @@
         // Avoid draining fillrate performance on mobile devices,
         // and default/override low DPI mode on mobile browsers.
         config.devicePixelRatio = 1;
-        unityShowBanner("WebGL builds are not supported on mobile devices.");
+        unityShowBanner('WebGL builds are not supported on mobile devices.');
       } else {
         canvas.style.width = "960px";
         canvas.style.height = "600px";
@@ -170,18 +155,18 @@
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
           progressBarFull.style.width = 100 * progress + "%";
-        })
-          .then((unityInstance) => {
-            loadingBar.style.display = "none";
-            fullscreenButton.onclick = () => {
-              unityInstance.SetFullscreen(1);
-            };
-          })
-          .catch((message) => {
-            alert(message);
-          });
+        }).then((unityInstance) => {
+          loadingBar.style.display = "none";
+          fullscreenButton.onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+        }).catch((message) => {
+          alert(message);
+        });
       };
       document.body.appendChild(script);
     </script>
+    <script type="module" crossorigin src="./assets/index-f9496d0e.js"></script>
+    <script src="./network.js"></script>
   </body>
 </html>
