@@ -1178,29 +1178,29 @@ var tempDouble;
 var tempI64;
 
 var ASM_CONSTS = {
- 5525712: function() {
+ 5622704: function() {
   Module["emscripten_get_now_backup"] = performance.now;
  },
- 5525767: function($0) {
+ 5622759: function($0) {
   performance.now = function() {
    return $0;
   };
  },
- 5525815: function($0) {
+ 5622807: function($0) {
   performance.now = function() {
    return $0;
   };
  },
- 5525863: function() {
+ 5622855: function() {
   performance.now = Module["emscripten_get_now_backup"];
  },
- 5525918: function() {
+ 5622910: function() {
   return Module.webglContextAttributes.premultipliedAlpha;
  },
- 5525979: function() {
+ 5622971: function() {
   return Module.webglContextAttributes.preserveDrawingBuffer;
  },
- 5526043: function() {
+ 5623035: function() {
   return Module.webglContextAttributes.powerPreference;
  }
 };
@@ -3021,6 +3021,15 @@ function _JS_WebRequest_SetTimeout(requestId, timeout) {
   return;
  }
  requestOptions.timeout = timeout;
+}
+
+var remoteVideoInstances = [];
+
+var localVideo = null;
+
+function _ReleaseChannel(channel) {
+ var channel_str = Pointer_stringify(channel);
+ wgl_mc_releaseChannel(channel_str);
 }
 
 function _SendAsyncError() {
@@ -8251,6 +8260,77 @@ function _abort() {
  abort();
 }
 
+function _addInjectStreamUrl(url, width, height, videoGop, videoFramerate, videoBitrate, audioSampleRate, audioBitrate, audioChannels) {}
+
+function _addInjectStreamUrl2(channel, url, width, height, videoGop, videoFramerate, videoBitrate, audioSampleRate, audioBitrate, audioChannels) {}
+
+function _addPublishStreamUrl(url, transcodingEnabled) {
+ var strUrl = Pointer_stringify(url);
+ StartLiveTranscoding(strUrl, transcodingEnabled);
+}
+
+function _addPublishStreamUrl2(channel, url, transcodingEnabled) {}
+
+function _addUserVideoInfo(userId, textureId) {}
+
+function _addUserVideoInfo2(channelId, _userId, _textureId) {}
+
+function _addVideoWatermark(url, x, y, width, height) {
+ var url_Str = Pointer_stringify(url);
+ startWaterMark_WGL(url_Str, x, y, width, height);
+}
+
+function _addVideoWatermark2(watermarkUrl, visibleInPreview, positionInLandscapeX, positionInLandscapeY, positionInLandscapeWidth, positionInLandscapeHeight, positionInPortraitX, positionInPortraitY, positionInPortraitWidth, positionInPortraitHeight) {
+ var url_Str = Pointer_stringify(watermarkUrl);
+ startWaterMark_WGL(url_Str, positionInLandscapeX, positionInLandscapeY, positionInLandscapeWidth, positionInLandscapeHeight);
+}
+
+function _adjustAudioMixingPlayoutVolume(volume) {
+ AdjustAudioMixingPlayoutVolume(volume);
+}
+
+function _adjustAudioMixingPublishVolume(volume) {
+ AdjustAudioMixingPublishVolume(volume);
+}
+
+function _adjustAudioMixingVolume(level) {
+ AdjustAudioMixingVolume(level);
+}
+
+function _adjustLoopbackRecordingSignalVolume() {}
+
+function _adjustPlaybackSignalVolume(volume) {
+ adjustPlaybackSignalVolume_WGL(volume);
+}
+
+function _adjustRecordingSignalVolume(volume) {
+ adjustRecordingSignalVolume_WGL(volume);
+}
+
+function _adjustUserPlaybackSignalVolume(uid, volume) {}
+
+function _adjustUserPlaybackSignalVolume2(channel, userId, volume) {
+ adjustUserPlaybackSignalVolume2_mc_WGL(userId, volume);
+}
+
+function _adjustUserPlaybackSignalVolume2_WGLM(channel, userId, volume) {
+ var userId_Str = Pointer_stringify(userId);
+ adjustUserPlaybackSignalVolume2_mc_WGL(userId_Str, volume);
+}
+
+function _adjustUserPlaybackSignalVolume_WGLM(uid, volume) {
+ var uid_Str = Pointer_stringify(uid);
+ adjustUserPlaybackSignalVolume_WGL(uid_Str, volume);
+}
+
+function _channelId(channel) {}
+
+function _clearRemotePositions() {}
+
+function _clearVideoWatermarks() {
+ clearVideoWatermarks_WGL();
+}
+
 function _clock() {
  if (_clock.start === undefined) _clock.start = Date.now();
  return (Date.now() - _clock.start) * (1e6 / 1e3) | 0;
@@ -8309,9 +8389,94 @@ function _clock_gettime(clk_id, tp) {
  return 0;
 }
 
+function _complain(callId, desc) {}
+
+function _configPublisher(width, height, framerate, bitrate, defaultLayout, lifecycle, owner, injectStreamWidth, injectStreamHeight, injectStreamUrl, publishUrl, rawStreamUrl, extraInfo) {}
+
+function _creatAAudioPlaybackDeviceManager() {}
+
+function _creatAAudioRecordingDeviceManager() {}
+
+function _createAVideoDeviceManager() {}
+
+function _createChannel(channelId) {
+ var channelId_Str = Pointer_stringify(channelId);
+ wgl_mc_createChannel(channelId_Str);
+}
+
+function _createDataStream(reliable, ordered) {
+ createDataStream(ordered);
+ return 0;
+}
+
+function _createDataStream2(channel, reliable, ordered) {}
+
+function _createDataStream_channel(channel, syncWithAudio, ordered) {}
+
+function _createDataStream_engine(syncWithAudio, ordered) {
+ createDataStream(ordered);
+}
+
+function _createEngine(appID) {
+ var app_id = Pointer_stringify(appID);
+ return createIRtcEngine(app_id);
+}
+
+function _createEngine2(appID, areaCode, filePath, fileSize, level) {
+ var app_id = Pointer_stringify(appID);
+ return createIRtcEngine2(app_id, areaCode);
+}
+
+function _createLocalTexture() {
+ if (localTracks.videoTrack) {
+  localVideo = document.getElementById("video_" + localTracks.videoTrack._ID);
+ }
+}
+
+function _createMediaRecorder() {
+ SendNotImplementedError("createMediaRecorder");
+}
+
+function _createRemoteTexture(userId) {
+ var ch_userId = Pointer_stringify(userId);
+ setTimeout(function() {
+  var remoteUser = remoteUsers[ch_userId];
+  if (remoteUser && remoteUser.videoTrack) {
+   video = document.getElementById("video_" + remoteUser.videoTrack._ID);
+   remoteVideoInstances[ch_userId] = video;
+  }
+ }, 200);
+ return 1;
+}
+
+function _deleteEngine() {
+ return false;
+}
+
+function _deleteTexture(tex) {}
+
 function _difftime(time1, time0) {
  return time1 - time0;
 }
+
+function _disableAudio() {
+ enableAudio(false);
+}
+
+function _disableLastmileTest() {
+ enableLastMile(false);
+}
+
+function _disableLogUpload() {
+ disableLogUpload();
+ return 1;
+}
+
+function _disableVideo() {
+ client_manager.setVideoEnabled(false);
+}
+
+function _disableVideoObserver() {}
 
 function _dlclose(handle) {}
 
@@ -10881,6 +11046,100 @@ function _emscripten_webgl_init_context_attributes(attributes) {
  HEAP32[a + (0 >> 2)] = HEAP32[a + (4 >> 2)] = HEAP32[a + (12 >> 2)] = HEAP32[a + (16 >> 2)] = HEAP32[a + (32 >> 2)] = HEAP32[a + (40 >> 2)] = 1;
 }
 
+function _enableAudio() {
+ enableAudio(true);
+}
+
+function _enableAudioVolumeIndication(interval, smooth, report_vad) {
+ enableAudioVolumeIndicator();
+}
+
+function _enableAudioVolumeIndication2() {
+ enableAudioVolumeIndicator2();
+}
+
+function _enableContentInspect(enabled, extraInfo, modulesInfo, modulesCount) {
+ SendNotImplementedError("enableContentInspect");
+}
+
+function _enableDeepLearningDenoise() {}
+
+function _enableDualStreamMode(enabled) {
+ enableDualStream_WGL(enabled);
+}
+
+function _enableEncryption(enabled, encryptionKey, encryptionMode) {}
+
+function _enableEncryption2(channel, enabled, encryptionKey, encryptionMode) {
+ var encryptionKey_Str = Pointer_stringify(encryptionKey);
+ enableEncryption2_mc(enabled, encryptionKey_Str, encryptionMode);
+}
+
+function _enableFaceDetection(enable) {}
+
+function _enableInEarMonitoring(enabled) {}
+
+function _enableLastmileTest() {
+ enableLastMile(true);
+}
+
+function _enableLocalAudio(enabled) {
+ enableLocalAudio(enabled);
+}
+
+function _enableLocalVideo(enabled) {
+ enableLocalVideo(enabled);
+}
+
+function _enableLocalVoicePitchCallback(interval) {
+ SendNotImplementedError("enableLocalVoicePitchCallback");
+}
+
+function _enableLogUpload() {
+ enableLogUpload();
+ return 1;
+}
+
+function _enableLoopbackRecording(enabled, deviceName) {}
+
+function _enableRemoteSuperResolution(userId, enable) {}
+
+function _enableRemoteSuperResolution2(channel, userId, enable) {}
+
+function _enableRemoteSuperResolution3(enabled, mode, uid) {}
+
+function _enableRemoteSuperResolution4(chan_ptr, enabled, mode, uid) {}
+
+function _enableSoundPositionIndication(enabled) {}
+
+function _enableSpatialAudio(enabled) {
+ enableSpatialAudio(enabled);
+}
+
+function _enableSpatialAudio_MC(enabled) {
+ enableSpatialAudio_MC(enabled);
+}
+
+function _enableVideo() {
+ client_manager.setVideoEnabled(true);
+}
+
+function _enableVideoObserver() {}
+
+function _enableVirtualBackground(enabled, backgroundSourceType, color, source, blurDegree, mute, loop) {
+ enable = enabled == 0 ? false : true;
+ muted = mute == 0 ? false : true;
+ looped = loop == 0 ? false : true;
+ source_Str = Pointer_stringify(source);
+ initVirtualBackground(enable, backgroundSourceType, color, source_Str, blurDegree, muted, looped);
+}
+
+function _enableWebSdkInteroperability(enabled) {}
+
+function _enableWirelessAccelerate(enabled) {
+ SendNotImplementedError("enableWirelessAccelerate");
+}
+
 var ENV = {};
 
 function getExecutableName() {
@@ -11014,9 +11273,199 @@ function _flock(fd, operation) {
  return 0;
 }
 
+function _followSystemPlaybackDevice(enabled) {
+ SendNotImplementedError("followSystemPlaybackDevice");
+}
+
+function _followSystemRecordingDevice(enabled) {
+ SendNotImplementedError("followSystemRecordingDevice");
+}
+
+function _freeObject(obj) {}
+
+function _generateNativeTexture() {}
+
+function _getAudioFileInfo(filePath) {
+ SendNotImplementedError("getAudioFileInfo");
+}
+
+function _getAudioMixingCurrentPosition() {
+ var position = GetAudioMixingCurrentPosition();
+ return position;
+}
+
+function _getAudioMixingDuration() {
+ var duration = GetAudioMixingDuration();
+ return duration;
+}
+
+function _getAudioMixingDuration2() {}
+
+function _getAudioMixingPlayoutVolume() {
+ var volume = GetAudioMixingPlayoutVolume();
+ return volume;
+}
+
+function _getAudioMixingPublishVolume() {
+ var volume = GetAudioMixingPublishVolume();
+ return volume;
+}
+
+function _getAudioPlaybackDefaultDevice(deviceName, deviceId) {
+ SendNotImplementedError("getAudioPlaybackDefaultDevice");
+}
+
+function _getAudioPlaybackDevice(index, deviceName, deviceId) {}
+
+function _getAudioPlaybackDeviceCount() {}
+
+function _getAudioPlaybackDeviceVolume() {
+ return wrapper.savedSettings.playbackVolume;
+}
+
+function _getAudioRecordingDefaultDevice(deviceName, deviceId) {
+ SendNotImplementedError("getAudioRecordingDefaultDevice");
+}
+
+function _getAudioRecordingDevice(index, deviceName, deviceId) {}
+
+function _getAudioRecordingDeviceCount() {}
+
+function _getAudioRecordingDeviceVolume() {
+ return wrapper.savedSettings.localAudioTrackVolume;
+}
+
+function _getAudioTrackCount() {
+ SendNotImplementedError("getAudioTrackCount");
+}
+
+function _getCallId() {}
+
+function _getCallId2(channel) {}
+
+function _getCameraMaxZoomFactor() {
+ SendNotImplementedError("getCameraMaxZoomFactor");
+}
+
+function _getConnectionState() {
+ var con_state = wrapper.getConnectionState();
+ var conIndex = 1;
+ if (con_state == "DISCONNECTED") {
+  conIndex = 1;
+ } else if (con_state == "CONNECTING") {
+  conIndex = 2;
+ } else if (con_state == "RECONNECTING") {
+  conIndex = 4;
+ } else if (con_state == "CONNECTED") {
+  conIndex = 3;
+ }
+ return conIndex;
+}
+
+function _getConnectionState2(channel) {
+ return getConnectionState2_MC();
+}
+
+function _getCurrentPlaybackDevice(deviceName, deviceId) {}
+
+function _getCurrentPlaybackDeviceInfo(deviceName, deviceId) {}
+
+function _getCurrentRecordingDevice(deviceId) {}
+
+function _getCurrentRecordingDeviceInfo(deviceName, deviceId) {}
+
+function _getCurrentVideoDevice(deviceId) {}
+
+function _getEffectCurrentPosition() {}
+
+function _getEffectDuration() {}
+
+function _getEffectsVolume() {
+ return GetEffectsVolume();
+}
+
+function _getErrorDescription(code) {}
+
+function _getMultiChannelWanted() {
+ return multiChannelWant_MC;
+}
+
+function _getRemoteVideoStats_MC() {
+ getRemoteVideoStatsMC();
+}
+
+function _getRemoteVideoStats_WGL() {
+ getRemoteVideoStats();
+}
+
+function _getScreenCaptureIconImage() {
+ SendNotImplementedError("getScreenCaptureIconImage");
+}
+
+function _getScreenCaptureIsPrimaryMonitor(index) {
+ SendNotImplementedError("getScreenCaptureIsPrimaryMonitor");
+}
+
+function _getScreenCaptureSourceId(index) {
+ SendNotImplementedError("getScreenCaptureSourceId");
+}
+
+function _getScreenCaptureSourceName(index) {
+ SendNotImplementedError("getScreenCaptureSourceName");
+}
+
+function _getScreenCaptureSourceProcessPath(index) {
+ SendNotImplementedError("getScreenCaptureSourceProcessPath");
+}
+
+function _getScreenCaptureSourceTitle(index) {
+ SendNotImplementedError("getScreenCaptureSourceTitle");
+}
+
+function _getScreenCaptureSourceType(index) {
+ SendNotImplementedError("getScreenCaptureSourceType");
+}
+
+function _getScreenCaptureSources(thumbHeight, thumbWidth, iconHeight, iconWidth, includeScreen) {
+ SendNotImplementedError("getScreenCaptureSources");
+}
+
+function _getScreenCaptureSourcesCount() {
+ SendNotImplementedError("getScreenCaptureSourcesCount");
+}
+
+function _getScreenCaptureThumbImage(index, buffer) {
+ SendNotImplementedError("getScreenCaptureThumbImage");
+}
+
+function _getSdkVersion() {
+ var bufferSize = lengthBytesUTF8(SDK_VERSION) + 1;
+ var buffer = _malloc(bufferSize);
+ stringToUTF8(SDK_VERSION, buffer, bufferSize);
+ return buffer;
+}
+
 function _getTempRet0() {
  return getTempRet0();
 }
+
+function _getUserInfoByUid(uid) {}
+
+function _getUserInfoByUid_WGL(uid) {
+ var uid_Str = Pointer_stringify(uid);
+ var uinfo = getUserInfoByUid_WGL(uid_Str);
+ uinfo = uinfo.toString();
+ var bufferSize = lengthBytesUTF8(uinfo) + 1;
+ var buffer = _malloc(bufferSize);
+ stringToUTF8(uinfo, buffer, bufferSize);
+ return buffer;
+}
+
+function _getUserInfoByUserAccount(userAccount) {}
+
+function _getVideoDeviceCollectionCount() {}
+
+function _getVideoDeviceCollectionDevice(index, deviceName, deviceId) {}
 
 function _getaddrinfo(node, service, hint, out) {
  var addr = 0;
@@ -13511,9 +13960,194 @@ function _glViewport(x0, x1, x2, x3) {
  GLctx["viewport"](x0, x1, x2, x3);
 }
 
+function _initChannelEventCallback(channel, onWarning, onError, onJoinChannelSuccess, onRejoinChannelSuccess, onLeaveChannel, onClientRoleChanged, onUserJoined, onUserOffline, onConnectionLost, onRequestToken, onTokenPrivilegeWillExpire, onRtcStats, onNetworkQuality, onRemoteVideoStats, onRemoteAudioStats, onRemoteAudioStateChanged, onActiveSpeaker, onVideoSizeChanged, onRemoteVideoStateChanged, onStreamMessage, onStreamMessageError, onMediaRelayStateChanged, onMediaRelayEvent, onRtmpStreamingStateChanged, onTranscodingUpdated, onStreamInjectedStatus, onRemoteSubscribeFallbackToAudioOnly, onConnectionStateChanged, onLocalPublishFallbackToAudioOnly, onRtmpStreamingEvent, onAudioPublishStateChange, onVideoPublishStateChange, onAudioSubscribeStateChange, onVideoSubscribeStateChange, onUserSuperResolutionEnabled) {}
+
+function _initEventOnCaptureVideoFrame(onCaptureVideoFrame) {}
+
+function _initEventOnEngineCallback(OnJoinChannelSuccessCallback, OnReJoinChannelSuccessCallback, OnConnectionLostCallback, OnLeaveChannelCallback, OnConnectionInterruptedCallback, OnRequestTokenCallback, OnUserJoinedCallback, OnUserOfflineCallback, OnAudioVolumeIndicationCallback, OnLocalVoicePitchInHzCallback, OnUserMuteAudioCallback, OnSDKWarningCallback, OnSDKErrorCallback, OnRtcStatsCallback, OnAudioMixingFinishedCallback, OnAudioRouteChangedCallback, OnFirstRemoteVideoDecodedCallback, OnVideoSizeChangedCallback, OnClientRoleChangedCallback, OnUserMuteVideoCallback, OnMicrophoneEnabledCallback, OnApiExecutedCallback, OnFirstLocalAudioFrameCallback, OnFirstRemoteAudioFrameCallback, OnLastmileQualityCallback, OnAudioQualityCallback, OnStreamInjectedStatusCallback, OnStreamUnpublishedCallback, OnStreamPublishedCallback, OnStreamMessageErrorCallback, OnStreamMessageCallback, OnConnectionBannedCallback, OnVideoStoppedCallback, OnTokenPrivilegeWillExpireCallback, OnNetworkQualityCallback, OnLocalVideoStatsCallback, OnRemoteVideoStatsCallback, OnRemoteAudioStatsCallback, OnFirstLocalVideoFrameCallback, OnFirstRemoteVideoFrameCallback, OnUserEnableVideoCallback, OnAudioDeviceStateChangedCallback, OnCameraReadyCallback, OnCameraFocusAreaChangedCallback, OnCameraExposureAreaChangedCallback, OnRemoteAudioMixingBeginCallback, OnRemoteAudioMixingEndCallback, OnAudioEffectFinishedCallback, OnVideoDeviceStateChangedCallback, OnRemoteVideoStateChangedCallback, OnUserEnableLocalVideoCallback, OnLocalPublishFallbackToAudioOnlyCallback, OnRemoteSubscribeFallbackToAudioOnlyCallback, OnConnectionStateChangedCallback, OnRemoteVideoTransportStatsCallback, OnRemoteAudioTransportStatsCallback, OnTranscodingUpdatedCallback, OnAudioDeviceVolumeChangedCallback, OnActiveSpeakerCallback, OnMediaEngineStartCallSuccessCallback, OnMediaEngineLoadSuccessCallback, OnAudioMixingStateChangedCallback, OnFirstRemoteAudioDecodedCallback, OnLocalVideoStateChangedCallback, OnRtmpStreamingStateChangedCallback, OnNetworkTypeChangedCallback, OnLastmileProbeResultCallback, OnLocalUserRegisteredCallback, OnUserInfoUpdatedCallback, OnLocalAudioStateChangedCallback, OnRemoteAudioStateChangedCallback, OnLocalAudioStatsCallback, OnChannelMediaRelayStateChangedCallback, OnChannelMediaRelayEventCallback, OnFacePositionChangedCallback, OnRtmpStreamingEventCallback, OnAudioPublishStateChangeCallback, OnVideoPublishStateChangeCallback, OnAudioSubscribeStateChangeCallback, OnVideoSubscribeStateChangeCallback, OnFirstLocalAudioFramePublishedCallback, OnFirstLocalVideoFramePublishedCallback, OnUserSuperResolutionEnabledCallback, OnUploadLogResultCallback, OnVirtualBackgroundSourceEnabledCallback, OnRequestAudioFileInfoHandlback, OnContentInspectResultCallback, OnSnapshotTakenCallback, OnClientRoleChangeFailedCallback, OnAudioDeviceTestVolumeIndicationCallback, OnProxyConnectedCallback, OnWlAccMessageCallback, OnWlAccStatsCallback, OnScreenCaptureInfoUpdatedCallback) {
+ UnityHooks.OnStreamMessageCallback = OnStreamMessageCallback;
+ UnityHooks.InvokeStreamMessageCallback = function(uid, bytes, length) {
+  if (UnityHooks.data) {
+   _free(UnityHooks.data);
+  }
+  var data = _malloc(length);
+  for (var i = 0; i < length; i++) {
+   HEAPU8[data + i] = bytes[i];
+  }
+  UnityHooks.data = data;
+  Runtime.dynCall("viiii", UnityHooks.OnStreamMessageCallback, [ uid, 0, data, length ]);
+ };
+ UnityHooks.OnVideoSizeChangedCallback = OnVideoSizeChangedCallback;
+ UnityHooks.InvokeVideoSizeChangedCallback = function(uid, width, height) {
+  Runtime.dynCall("viiii", UnityHooks.OnVideoSizeChangedCallback, [ uid, width, height, 0 ]);
+ };
+ UnityHooks.isLoaded = true;
+}
+
+function _initEventOnMediaRecorderCallback(onRecorderStateChanged, onRecorderInfoUpdated) {
+ SendNotImplementedError("initEventOnMediaRecorderCallback");
+}
+
+function _initEventOnMetaDataCallback(onMetadataReceived, onReadyToSendMetadata, onGetMaxMetadataSize) {}
+
+function _initEventOnMixedAudioFrame(onMixedAudioFrame) {}
+
+function _initEventOnPacketCallback(onReceiveAudioPacket, onReceiveVideoPacket, onSendAudioPacket, onSendVideoPacket) {}
+
+function _initEventOnPlaybackAudioFrame(onPlaybackAudioFrame) {}
+
+function _initEventOnPlaybackAudioFrameBeforeMixing(onPlaybackAudioFrameBeforeMixing) {}
+
+function _initEventOnPullAudioFrame(onPullAudioFrame) {}
+
+function _initEventOnRecordAudioFrame(onRecordAudioFrame) {}
+
+function _initEventOnRenderVideoFrame(onRenderVideoFrame) {}
+
+function _initVirtualBackground_MC(enabled, backgroundSourceType, color, source, blurDegree, mute, loop) {
+ enable = enabled == 0 ? false : true;
+ muted = mute == 0 ? false : true;
+ looped = loop == 0 ? false : true;
+ source_Str = Pointer_stringify(source);
+ initVirtualBackground_MC(enabled, backgroundSourceType, color, source_Str, blurDegree, mute, loop);
+}
+
+function _isAudioPlaybackDeviceMute() {
+ return pd_muted;
+}
+
+function _isAudioRecordingDeviceMute() {
+ return localTracks.audioTrack._mediaStreamTrack.enabled;
+}
+
+function _isCameraAutoFocusFaceModeSupported() {
+ SendNotImplementedError("isCameraAutoFocusFaceModeSupported");
+}
+
+function _isCameraExposurePositionSupported() {
+ SendNotImplementedError("isCameraExposurePositionSupported");
+}
+
+function _isCameraFocusSupported() {
+ SendNotImplementedError("isCameraFocusSupported");
+}
+
+function _isCameraTorchSupported() {}
+
+function _isCameraZoomSupported() {
+ SendNotImplementedError("isCameraZoomSupported");
+}
+
+function _isLocalVideoReady() {
+ var lVid = undefined;
+ if (localTracks != undefined) {
+  if (localTracks.videoTrack != undefined) {
+   if (localTracks.videoTrack._player != undefined) {
+    lVid = localTracks.videoTrack._player.videoElement;
+    return true;
+   }
+  }
+ }
+ return false;
+}
+
+function _isRemoteVideoReady(userId) {
+ var ch_userId = Pointer_stringify(userId);
+ var lVid = undefined;
+ if (remoteUsers[ch_userId] != undefined) {
+  if (remoteUsers[ch_userId].videoTrack != undefined) {
+   if (remoteUsers[ch_userId].videoTrack._player != undefined) {
+    lVid = remoteUsers[ch_userId].videoTrack._player.videoElement;
+   }
+  }
+ }
+ if (lVid == undefined) {
+  return false;
+ }
+ return true;
+}
+
+function _isRemoteVideoReady_MC(channelId, userId) {
+ var ch_userId = Pointer_stringify(userId);
+ var channelId_str = Pointer_stringify(channelId);
+ var clientmc = find_mc_client(channelId_str);
+ if (clientmc != null) {
+  var lVid = undefined;
+  if (clientmc.remoteUsers[ch_userId] != undefined) {
+   if (clientmc.remoteUsers[ch_userId].videoTrack != undefined) {
+    if (clientmc.remoteUsers[ch_userId].videoTrack._player != undefined) {
+     lVid = clientmc.remoteUsers[ch_userId].videoTrack._player.videoElement;
+    }
+   }
+  }
+  if (lVid == undefined) {
+   return false;
+  }
+  return true;
+ } else {
+  return false;
+ }
+}
+
+function _isSpeakerphoneEnabled() {}
+
+function _joinChannel(channelKey, channelName, info, uid) {
+ var channel_key = Pointer_stringify(channelKey);
+ var channel_name = Pointer_stringify(channelName);
+ var channel_info = Pointer_stringify(info);
+ wglw_joinChannel(channel_key, channel_name, channel_info, uid);
+}
+
+function _joinChannel2(channel, token, info, uid, autoSubscribeAudio, autoSubscribeVideo, publishLocalAudio, publishLocalVideo) {
+ var token_Str = Pointer_stringify(token);
+ var info_Str = Pointer_stringify(info);
+ wgl_mc_joinChannel2(token_Str, uid, autoSubscribeAudio, autoSubscribeVideo, publishLocalAudio, publishLocalVideo);
+}
+
+function _joinChannelWithMediaOption(token, channelId, info, uid, autoSubscribeAudio, autoSubscribeVideo, publishLocalAudio, publishLocalVideo) {
+ var token_str = Pointer_stringify(token);
+ var channelId_str = Pointer_stringify(channelId);
+ wglw_joinChannel_withOption(token_str, channelId_str, info, uid, autoSubscribeAudio, autoSubscribeVideo, publishLocalAudio, publishLocalVideo);
+}
+
+function _joinChannelWithUserAccount(token, channelId, userAccount) {
+ var token_str = Pointer_stringify(token);
+ var channelId_str = Pointer_stringify(channelId);
+ var userAccount_str = Pointer_stringify(userAccount);
+ joinChannelWithUserAccount_WGL(token_str, channelId_str, userAccount_str);
+}
+
+function _joinChannelWithUserAccount2(channel, token, userAccount, autoPublishAudio, autoPublishVideo, publishLocalAudio, publishLocalVideo) {
+ _logger("joinChannelWithUserAccount2 in jslib");
+ var token_str = Pointer_stringify(token);
+ var userAccount_str = Pointer_stringify(userAccount);
+ wgl_mc_joinChannel2(token_str, userAccount_str, autoPublishAudio, autoPublishVideo, publishLocalAudio, publishLocalVideo);
+}
+
+function _joinChannelWithUserAccount_engine(token, channelId, userAccount, autoSubscribeAudio, autoSubscribeVideo, publishLocalAudio, publishLocalVideo) {
+ var token_str = Pointer_stringify(token);
+ var channelId_str = Pointer_stringify(channelId);
+ var userAccount_str = Pointer_stringify(userAccount);
+ joinChannelWithUserAccount_engine_WGL(token_str, channelId_str, userAccount_str, autoSubscribeAudio, autoSubscribeVideo, publishLocalAudio, publishLocalVideo);
+}
+
+function _leaveChannel() {
+ wglw_leaveChannel();
+}
+
+function _leaveChannel2(channel) {
+ leaveChannel2_WGL();
+}
+
 function _llvm_eh_typeid_for(type) {
  return type;
 }
+
+function _localSpatialAudio_initialize() {}
+
+function _localSpatialAudio_release() {}
+
+function _localSpatialAudio_setParameters(params) {}
 
 function _mktime(tmPtr) {
  _tzset();
@@ -13542,9 +14176,653 @@ function _mktime(tmPtr) {
  return date.getTime() / 1e3 | 0;
 }
 
+function _muteAllRemoteAudioStreams(mute) {
+ muteAllRemoteAudioStreams(mute);
+}
+
+function _muteAllRemoteAudioStreams2(channel, mute) {
+ muteAllRemoteAudioStreams2_mc_WGL(mute);
+}
+
+function _muteAllRemoteAudioStreams_spatialAudio(mute) {}
+
+function _muteAllRemoteVideoStreams(mute) {
+ muteAllRemoteVideoStreams(mute);
+}
+
+function _muteAllRemoteVideoStreams2(channel, mute) {
+ muteAllRemoteVideoStreams2_mc_WGL(mute);
+}
+
+function _muteLocalAudioStream(muteStream) {
+ muteLocalAudioStream(muteStream);
+}
+
+function _muteLocalAudioStream_channel(channel, mute) {
+ var str_chan = Pointer_stringify(channel);
+ muteLocalAudioStream2_mc_WGL(str_chan, mute);
+}
+
+function _muteLocalAudioStream_spatialAudio(mute) {}
+
+function _muteLocalVideoStream(enable) {
+ muteLocalVideoTrack(enable);
+}
+
+function _muteLocalVideoStream_channel(channel, mute) {
+ var str_chan = Pointer_stringify(channel);
+ muteLocalVideoStream2_mc_WGL(str_chan, mute);
+}
+
+function _muteRemoteAudioStream(uid, mute) {}
+
+function _muteRemoteAudioStream2(channel, userId, mute) {
+ muteRemoteAudioStream2_mc_WGL(userId, mute);
+}
+
+function _muteRemoteAudioStream2_WGLM(channel, userId, mute) {
+ var userId_Str = Pointer_stringify(userId);
+ muteRemoteAudioStream2_mc_WGL(userId_Str, mute);
+}
+
+function _muteRemoteAudioStream_WGLM(uid, mute) {
+ var uid_Str = Pointer_stringify(uid);
+ MuteRemoteAudioStream(uid_Str, mute);
+}
+
+function _muteRemoteVideoStream(uid, mute) {}
+
+function _muteRemoteVideoStream2(channel, userId, mute) {}
+
+function _muteRemoteVideoStream2_WGLM(channel, userId, mute) {
+ var userId_Str = Pointer_stringify(userId);
+ muteRemoteVideoStream2_mc_WGL(userId_Str, mute);
+}
+
+function _muteRemoteVideoStream_WGLM(uid, mute) {
+ var uid_Str = Pointer_stringify(uid);
+ MuteRemoteVideoStream(uid_Str, mute);
+}
+
+function _pauseAllChannelMediaRelay() {
+ SendNotImplementedError("pauseAllChannelMediaRelay");
+}
+
+function _pauseAllEffects() {
+ PauseAllEffects();
+}
+
+function _pauseAudioMixing() {
+ PauseAudioMixing();
+}
+
+function _pauseEffect(soundId) {
+ PauseEffect(soundId);
+}
+
+function _playEffect(soundId, filePath, loopCount, pitch, pan, gain, publish) {
+ var strFilePath = Pointer_stringify(filePath);
+ PlayEffect(soundId, strFilePath, loopCount, pitch, pan, gain, publish);
+}
+
+function _playEffect2() {}
+
+function _preloadEffect(soundId, filePath) {
+ var strFilePath = Pointer_stringify(filePath);
+ PreloadEffect(soundId, strFilePath);
+}
+
+function _publish(channel) {
+ publish_mc_WGL();
+}
+
+function _pullAudioFrame_(audioBuffer, type, samples, bytesPerSample, channels, samplesPerSec, renderTimeMs, avsync_type) {}
+
+function _pushAudioFrame3_(sourcePos, audioFrameType, samples, bytesPerSample, channels, samplesPerSec, buffer, renderTimeMs, avsync_type) {
+ SendNotImplementedError("pushAudioFrame3_");
+}
+
+function _pushAudioFrame_(audioFrameType, samples, bytesPerSample, channels, samplesPerSec, buffer, renderTimeMs, avsync_type) {
+ var arsize = samples * (channels * bytesPerSample);
+ var buf = new ArrayBuffer(arsize);
+ var arr = new Uint8Array(buf);
+ for (var i = 0; i < arsize; i++) {
+  arr[i] = HEAPU8[buffer + i];
+ }
+}
+
+function _pushVideoFrame(type, format, videoBuffer, stride, height, cropLeft, cropTop, cropRight, cropBottom, rotation, timestamp) {}
+
+function _pushVideoFrame2(type, format, bufferPtr, stride, height, cropLeft, cropTop, cropRight, cropBottom, rotation, timestamp) {
+ SendNotImplementedError("pushVideoFrame2");
+}
+
+function _pushVideoFrameWGL(videoBuffer, size, stride, height, rotation, cropLeft, cropTop, cropRight, cropBottom) {
+ var buf = new ArrayBuffer(Math.trunc(stride) * Math.trunc(height) * 4);
+ var arr = new Uint8Array(buf);
+ for (var i = 0; i < size; i++) {
+  arr[i] = HEAPU8[videoBuffer + i];
+ }
+ pushVideoFrame_WGL(arr, buf, size, stride, height, rotation, cropLeft, cropTop, cropRight, cropBottom);
+}
+
+function _rate(callId, rating, desc) {}
+
+function _refreshRecordingServiceStatus() {}
+
+function _registerAudioRawDataObserver() {}
+
+function _registerLocalUserAccount(appId, userAccount) {}
+
+function _registerMediaMetadataObserver(metaDataType) {}
+
+function _registerPacketObserver() {}
+
+function _registerVideoRawDataObserver() {}
+
+function _releaseAAudioPlaybackDeviceManager() {}
+
+function _releaseAAudioRecordingDeviceManager() {}
+
+function _releaseAVideoDeviceManager() {}
+
+function _releaseMediaRecorder() {
+ SendNotImplementedError("releaseMediaRecorder");
+}
+
+function _removeInjectStreamUrl(url) {}
+
+function _removeInjectStreamUrl2(channel, url) {}
+
+function _removePublishStreamUrl(url) {
+ var strUrl = Pointer_stringify(url);
+ sStopLiveTranscoding(strUrl);
+}
+
+function _removePublishStreamUrl2(channel, url) {}
+
+function _removeRemotePosition(uid) {}
+
+function _removeUserVideoInfo(userId) {}
+
+function _removeUserVideoInfo2(channelId, _userId) {}
+
+function _renewToken(token) {
+ var ch_token = Pointer_stringify(token);
+ renewToken(ch_token);
+}
+
+function _renewToken2(channel, token) {
+ var token_str = Pointer_stringify(token);
+ renewToken2_mc(token_str);
+}
+
+function _resumeAllChannelMediaRelay() {
+ SendNotImplementedError("resumeAllChannelMediaRelay");
+}
+
+function _resumeAllEffects() {
+ ResumeAllEffects();
+}
+
+function _resumeAudioMixing() {
+ ResumeAudioMixing();
+}
+
+function _resumeEffect(soundId) {
+ ResumeEffect(soundId);
+}
+
+function _selectAudioTrack(index) {
+ SendNotImplementedError("selectAudioTrack");
+}
+
+function _sendCustomReportMessage(id, category, events, label, value) {}
+
+function _sendMetadata(uid, size, buffer, timeStampMs) {}
+
+function _sendStreamMessage(streamId, data, length) {
+ const newArray = new ArrayBuffer(length);
+ const newByteArray = new Uint8Array(newArray);
+ for (var i = 0; i < length; i++) {
+  newByteArray[i] = HEAPU8[data + i];
+ }
+ return sendStreamMessage(newByteArray);
+}
+
+function _sendStreamMessage2(channel, streamId, data, length) {}
+
+function _setAVSyncSource(channelId, uid) {
+ SendNotImplementedError("setAVSyncSource");
+}
+
+function _setAVSyncSource2(channel, channelId, uid) {
+ SendNotImplementedError("setAVSyncSource2");
+}
+
+function _setAudioEffectParameters(preset, param1, param2) {}
+
+function _setAudioEffectPreset(preset) {}
+
+function _setAudioMixingDualMonoMode(speed) {
+ SendNotImplementedError("setAudioMixingDualMonoMode");
+}
+
+function _setAudioMixingPitch(pitch) {}
+
+function _setAudioMixingPlaybackSpeed(speed) {
+ SendNotImplementedError("setAudioMixingPlaybackSpeed");
+}
+
+function _setAudioMixingPosition(position) {
+ SetAudioMixingPosition(position);
+}
+
+function _setAudioPlaybackDevice(deviceId) {}
+
+function _setAudioPlaybackDeviceMute(mute) {
+ setAudioPlaybackDeviceMute(mute);
+}
+
+function _setAudioPlaybackDeviceVolume(volume) {
+ setAudioPlaybackDeviceVolume(volume);
+}
+
+function _setAudioProfile(audioProfile, scenario) {
+ SetAudioProfile(audioProfile);
+}
+
+function _setAudioRecordingCollectionDeviceWGL(deviceID) {
+ var deviceID_Str = Pointer_stringify(deviceID);
+ setAudioRecordingCollectionDeviceWGL(deviceID_Str);
+}
+
+function _setAudioRecordingDevice(deviceId) {}
+
+function _setAudioRecordingDeviceMute(mute) {
+ setAudioRecordingDeviceMute(mute);
+}
+
+function _setAudioRecordingDeviceVolume(volume) {
+ setAudioRecordingDeviceVolume(volume);
+}
+
+function _setAudioRecvRange(range) {}
+
+function _setAudioSessionOperationRestriction(restriction) {}
+
+function _setBeautyEffectOptions(enabled, lighteningContrastLevel, lighteningLevel, smoothnessLevel, rednessLevel) {
+ if (enabled == 1) {
+  setBeautyEffectOn(lighteningLevel, rednessLevel, smoothnessLevel);
+  return 0;
+ } else if (enabled == 0) {
+  setBeautyEffectOff();
+  return 0;
+ }
+ return 1;
+}
+
+function _setCameraAutoFocusFaceModeEnabled(enabled) {
+ SendNotImplementedError("setCameraAutoFocusFaceModeEnabled");
+}
+
+function _setCameraCaptureRotation(rotation) {}
+
+function _setCameraCapturerConfiguration(preference, cameraDirection) {
+ console.log("setCameraCapturerConfiguration: preference = " + preference);
+ console.log("setCameraCapturerConfiguration: cameraDirection = " + cameraDirection);
+ setCameraCapturerConfiguration(preference, cameraDirection);
+}
+
+function _setCameraExposurePosition(positionXinView, positionYinView) {
+ SendNotImplementedError("setCameraExposurePosition");
+}
+
+function _setCameraFocusPositionInPreview(positionX, positionY) {
+ SendNotImplementedError("setCameraFocusPositionInPreview");
+}
+
+function _setCameraTorchOn() {}
+
+function _setCameraZoomFactor(factor) {
+ SendNotImplementedError("setCameraZoomFactor");
+}
+
+function _setChannelProfile(profile) {
+ setChannelProfile(profile);
+}
+
+function _setClientRole(role) {
+ setClientRole(role);
+}
+
+function _setClientRole2(channel, role) {
+ setClientRole2_MC(role);
+}
+
+function _setClientRole_1(role, audienceLatencyLevel) {
+ setClientRole1(role, audienceLatencyLevel);
+}
+
+function _setClientRole_2(channel, role, audienceLatencyLevel) {
+ setClientRole2_MC(role, audienceLatencyLevel);
+}
+
+function _setCloudProxy() {}
+
+function _setColorEnhanceOptions(enabled, strengthLevel, skinProtectLevel) {
+ SendNotImplementedError("setColorEnhanceOptions");
+}
+
+function _setCurrentChannel_WGL(channelId) {
+ var channelId_Str = Pointer_stringify(channelId);
+ setCurrentChannel_WGL(channelId_Str);
+}
+
+function _setDefaultAudioRoutetoSpeakerphone(enabled) {}
+
+function _setDefaultEngineSettings() {}
+
+function _setDefaultMuteAllRemoteAudioStreams(channel, mute) {
+ console.log("Deprecated from v3.3.1");
+}
+
+function _setDefaultMuteAllRemoteAudioStreams2(channel, mute) {}
+
+function _setDefaultMuteAllRemoteVideoStreams(channel, mute) {}
+
+function _setDefaultMuteAllRemoteVideoStreams2(channel, mute) {}
+
+function _setDistanceUnit(unit) {}
+
+function _setEffectPosition() {}
+
+function _setEffectsVolume(volume) {
+ SetEffectsVolume(volume);
+}
+
+function _setEnableSpeakerphone(enabled) {}
+
+function _setEncryptionMode(mode) {
+ var ch_mode = Pointer_stringify(mode);
+ setEncryptionMode(ch_mode);
+}
+
+function _setEncryptionMode2(channel, encryptionMode) {
+ setEncryptionMode2_mc_WGL(encryptionMode);
+}
+
+function _setEncryptionSecret(secret) {
+ var ch_secret = Pointer_stringify(secret);
+ setEncryptionSecret(ch_secret);
+}
+
+function _setEncryptionSecret2(channel, secret) {
+ var userId_Str = Pointer_stringify(secret);
+ setEncryptionSecret2_mc_WGL(userId_Str);
+}
+
+function _setExternalAudioSink(enabled, sampleRate, channels) {}
+
+function _setExternalAudioSource(enabled, sampleRate, channels) {
+ setExternalAudioSource_WGL(enabled, sampleRate, channels);
+}
+
+function _setExternalAudioSourceVolume(sourcePos, volume) {
+ SendNotImplementedError("setExternalAudioSourceVolume");
+}
+
+function _setExternalVideoSource(enable, useTexture) {
+ setExternalVideoSource_WGL(enable);
+}
+
+function _setHighQualityAudioParametersWithFullband(fullband, stereo, fullBitrate) {}
+
+function _setInEarMonitoringVolume(volume) {}
+
+function _setLiveTranscoding(width, height, videoBitrate, videoFramerate, lowLatency, videoGroup, video_codec_profile, backgroundColor, userCount, transcodingUserInfo, transcodingExtraInfo, metaData, watermarkRtcImageUrl, watermarkRtcImageX, watermarkRtcImageY, watermarkRtcImageWidth, watermarkRtcImageHeight, backgroundImageRtcImageUrl, backgroundImageRtcImageX, backgroundImageRtcImageY, backgroundImageRtcImageWidth, backgroundImageRtcImageHeight, audioSampleRate, audioBitrate, audioChannels, audioCodecProfile, advancedFeatures, advancedFeatureCount) {
+ var strTranscodingUserInfo = Pointer_stringify(transcodingUserInfo);
+ var strTranscodingExtraInfo = Pointer_stringify(transcodingExtraInfo);
+ var strMetaData = Pointer_stringify(metaData);
+ var strWatermarkRtcImageUrl = Pointer_stringify(watermarkRtcImageUrl);
+ var strBackgroundImageRtcImageUrl = Pointer_stringify(backgroundImageRtcImageUrl);
+ var strAdvancedFeatures = Pointer_stringify(advancedFeatures);
+ SetLiveTranscoding(width, height, videoBitrate, videoFramerate, lowLatency, videoGroup, video_codec_profile, backgroundColor, userCount, strTranscodingUserInfo, strTranscodingExtraInfo, strMetaData, strWatermarkRtcImageUrl, watermarkRtcImageX, watermarkRtcImageY, watermarkRtcImageWidth, watermarkRtcImageHeight, strBackgroundImageRtcImageUrl, backgroundImageRtcImageX, backgroundImageRtcImageY, backgroundImageRtcImageWidth, backgroundImageRtcImageHeight, audioSampleRate, audioBitrate, audioChannels, audioCodecProfile, strAdvancedFeatures, advancedFeatureCount);
+}
+
+function _setLiveTranscoding2(channel, width, height, videoBitrate, videoFramerate, lowLatency, videoGroup, video_codec_profile, backgroundColor, userCount, transcodingUserInfo, transcodingExtraInfo, metaData, watermarkRtcImageUrl, watermarkRtcImageX, watermarkRtcImageY, watermarkRtcImageWidth, watermarkRtcImageHeight, backgroundImageRtcImageUrl, backgroundImageRtcImageX, backgroundImageRtcImageY, backgroundImageRtcImageWidth, backgroundImageRtcImageHeight, audioSampleRate, audioBitrate, audioChannels, audioCodecProfile, advancedFeatures, advancedFeatureCount) {}
+
+function _setLocalAccessPoint() {}
+
+function _setLocalPublishFallbackOption(option) {
+ setLocalPublishFallbackOption_WGL(option);
+}
+
+function _setLocalRenderMode(renderMode) {}
+
+function _setLocalVideoMirrorMode(mirrorMode) {}
+
+function _setLocalVoiceChanger(voiceChanger) {}
+
+function _setLocalVoiceEqualization(bandFrequency, bandGain) {}
+
+function _setLocalVoicePitch(pitch) {}
+
+function _setLocalVoiceReverb(reverbKey, value) {}
+
+function _setLocalVoiceReverbPreset(audioReverbPreset) {}
+
+function _setLogFile(filePath) {}
+
+function _setLogFileSize(fileSizeInKBytes) {}
+
+function _setLogFilter(filter) {
+ AgoraRTC.setLogLevel(filter);
+}
+
+function _setLowlightEnhanceOptions(enabled, mode, level) {
+ SendNotImplementedError("setLowlightEnhanceOptions");
+}
+
+function _setMaxAudioRecvCount(count) {}
+
+function _setMirrorApplied(wheatherApply) {
+ setMirrorApplied_WGL(wheatherApply);
+}
+
+function _setMixedAudioFrameParameters(sampleRate, samplesPerCall) {}
+
+function _setMultiChannelWant(multiChannelWant) {
+ setMultiChannelWant_MC(multiChannelWant);
+}
+
+function _setParameters(options) {}
+
+function _setPlaybackAudioFrameParameters(sampleRate, channel, mode, samplesPerCall) {}
+
+function _setPlaybackCollectionDeviceWGL(deviceID) {
+ var deviceID_Str = Pointer_stringify(deviceID);
+ setPlaybackCollectionDeviceWGL(deviceID_Str);
+}
+
+function _setPlaybackDeviceVolume(volume) {}
+
+function _setRecordingAudioFrameParameters(sampleRate, channel, mode, samplesPerCall) {}
+
+function _setRemoteDefaultVideoStreamType(remoteVideoStreamType) {
+ setRemoteDefaultVideoStreamType(remoteVideoStreamType);
+}
+
+function _setRemoteDefaultVideoStreamType2(channel, streamType) {
+ setRemoteDefaultVideoStreamType2_mc_WGL(streamType);
+}
+
+function _setRemoteRenderMode(channel, userId, renderMode, mirrorMode) {}
+
+function _setRemoteRenderMode2(channel, userId, renderMode, mirrorMode) {}
+
+function _setRemoteSubscribeFallbackOption(option) {
+ setRemoteSubscribeFallbackOption_WGL(option);
+}
+
+function _setRemoteUserPriority(uid, userPriority) {}
+
+function _setRemoteUserPriority2(channel, userId, userPriority) {
+ setRemoteUserPriority2_mc_WGL(userId, userPriority);
+}
+
+function _setRemoteUserPriority2_WGLM(channel, userId, userPriority) {
+ var userId_Str = Pointer_stringify(userId);
+ setRemoteUserPriority2_mc_WGL(userId_Str, userPriority);
+}
+
+function _setRemoteUserPriority_WGL(uid, userPriority) {
+ var uid_Str = Pointer_stringify(uid);
+ SetRemoteUserPriority(uid_Str, userPriority);
+}
+
+function _setRemoteUserSpatialAudioParams(uid, speaker_azimuth, speaker_elevation, speaker_distance, speaker_orientation, speaker_attenuation, enable_blur, enable_air_absorb) {
+ uid_Str = Pointer_stringify(uid);
+ newUID = parseInt(uid_Str);
+ blur = enable_blur == 0 ? false : true;
+ airAbsorb = enable_air_absorb == 0 ? false : true;
+ setRemoteUserSpatialAudioParams(newUID, speaker_azimuth, speaker_elevation, speaker_distance, speaker_orientation, speaker_attenuation, blur, airAbsorb);
+}
+
+function _setRemoteUserSpatialAudioParams2(uid, speaker_azimuth, speaker_elevation, speaker_distance, speaker_orientation, speaker_attenuation, enable_blur, enable_air_absorb) {
+ uid_Str = Pointer_stringify(uid);
+ newUID = parseInt(uid_Str);
+ blur = enable_blur == 0 ? false : true;
+ airAbsorb = enable_air_absorb == 0 ? false : true;
+ setRemoteUserSpatialAudioParams2(newUID, speaker_azimuth, speaker_elevation, speaker_distance, speaker_orientation, speaker_attenuation, blur, airAbsorb);
+}
+
+function _setRemoteVideoStreamType(userid, streamType) {
+ SetRemoteVideoSTreamType(userid, streamType);
+}
+
+function _setRemoteVideoStreamType2(channel, userId, streamType) {
+ setRemoteVideoStreamType2_mc_WGL(userId, streamType);
+}
+
+function _setRemoteVideoStreamType2_WGLM(channel, userId, streamType) {
+ var userId_Str = Pointer_stringify(userId);
+ setRemoteVideoStreamType2_mc_WGL(userId_Str, streamType);
+}
+
+function _setRemoteVoicePosition(uid, pan, gain) {}
+
+function _setRemoteVoicePosition2(channel, uid, pan, gain) {}
+
+function _setRenderMode(renderMode) {}
+
+function _setScreenCaptureContentHint(videoContentHint) {}
+
+function _setScreenCaptureScenario() {
+ SendNotImplementedError("setScreenCaptureScenario");
+}
+
+function _setSpeakerphoneVolume(volume) {}
+
 function _setTempRet0(val) {
  setTempRet0(val);
 }
+
+function _setVideoDenoiserOptions(enabled, mode, level) {
+ SendNotImplementedError("setVideoDenoiserOptions");
+}
+
+function _setVideoDeviceCollectionDevice(deviceId) {}
+
+function _setVideoDeviceCollectionDeviceWGL(deviceID) {
+ var deviceID_Str = Pointer_stringify(deviceID);
+ setVideoDeviceCollectionDeviceWGL(deviceID_Str);
+}
+
+function _setVideoEncoderConfiguration(width, height, frameRate, minFrameRate, bitrate, minBitrate, orientationMode, degradationPreference, videoMirrorMode) {
+ SetVideoEncoderConfiguration(width, height, frameRate, minFrameRate, bitrate, minBitrate, orientationMode, degradationPreference, videoMirrorMode);
+}
+
+function _setVideoProfile(profile, swapWidthAndHeight) {}
+
+function _setVideoQualityParameters(preferFrameRateOverImageQuality) {}
+
+function _setVirtualBackgroundBlur(blurDegree) {
+ setVirtualBackgroundBlur(blurDegree);
+}
+
+function _setVirtualBackgroundBlur_MC(blurDegree) {
+ setVirtualBackgroundBlur_MC(blurDegree);
+}
+
+function _setVirtualBackgroundColor(hexColor) {
+ var myColor = Pointer_stringify(hexColor);
+ setVirtualBackgroundColor(myColor);
+}
+
+function _setVirtualBackgroundColor_MC(hexColor) {
+ myColor = Pointer_stringify(hexColor);
+ setVirtualBackgroundColor_MC(myColor);
+}
+
+function _setVirtualBackgroundImage(imageFile) {
+ var myImg = Pointer_stringify(imageFile);
+ setVirtualBackgroundImage(myImg);
+}
+
+function _setVirtualBackgroundImage_MC(imageFile) {
+ var myImg = Pointer_stringify(imageFile);
+ setVirtualBackgroundImage_MC(myImg);
+}
+
+function _setVirtualBackgroundVideo(videoFile) {
+ var myVideo = Pointer_stringify(videoFile);
+ setVirtualBackgroundVideo(myVideo);
+}
+
+function _setVirtualBackgroundVideo_MC(videoFile) {
+ var myVideo = Pointer_stringify(videoFile);
+ setVirtualBackgroundVideo_MC(myVideo);
+}
+
+function _setVoiceBeautifierParameters() {}
+
+function _setVoiceBeautifierPreset(preset) {}
+
+function _setVoiceConversionPreset() {}
+
+function _setVoiceOnlyMode(enable) {
+ SetVoiceOnlyMode(enable);
+}
+
+function _setVolumeOfEffect(soundId, volume) {
+ SetVolumeOfEffect(soundId, volume);
+}
+
+function _setWebParametersBool(key, value) {
+ var key_Str = Pointer_stringify(key);
+ setWebParametersBool(key_Str, value);
+}
+
+function _setWebParametersDouble(key, value) {
+ var key_Str = Pointer_stringify(key);
+ setWebParametersDouble(key_Str, value);
+}
+
+function _setWebParametersInt(key, value) {
+ var key_Str = Pointer_stringify(key);
+ setWebParametersInt(key_Str, value);
+}
+
+function _setWebParametersString(key, value) {
+ var key_Str = Pointer_stringify(key);
+ var value_Str = Pointer_stringify(value);
+ setWebParametersString(key_Str, value_Str);
+}
+
+function _setupLocalVideo(hwnd, renderMode, uid, priv) {}
+
+function _setupRemoteVideo(hwnd, renderMode, uid, priv) {}
 
 function _sigaction(signum, act, oldact) {
  err("Calling stub instead of sigaction()");
@@ -13555,6 +14833,195 @@ function _sigemptyset(set) {
  HEAP32[set >> 2] = 0;
  return 0;
 }
+
+function _startAudioDeviceLoopbackTest(indicationInterval) {
+ SendNotImplementedError("startAudioDeviceLoopbackTest");
+}
+
+function _startAudioMixing(filePath, loopBack, replace, cycle) {
+ var strFilePath = Pointer_stringify(filePath);
+ StartAudioMixing(strFilePath, loopBack, replace, cycle);
+}
+
+function _startAudioMixing2() {}
+
+function _startAudioPlaybackDeviceTest(testAudioFilePath) {}
+
+function _startAudioRecording(filePath, quality) {
+ var filePath_Str = Pointer_stringify(filePath);
+ startAudioRecording_WGL(filePath_Str, quality);
+}
+
+function _startAudioRecording2(filePath, sampleRate, quality) {
+ var filePath_Str = Pointer_stringify(filePath);
+ startAudioRecording_WGL(filePath_Str, quality);
+}
+
+function _startAudioRecordingDeviceTest(indicationInterval) {}
+
+function _startAudioRecordingWithConfig() {}
+
+function _startChannelMediaRelay(srcChannelName, srcToken, srcUid, destChannelName, destToken, destUid, destCount) {}
+
+function _startChannelMediaRelay2(channel, srcChannelName, srcToken, srcUid, destChannelName, destToken, destUid, destCount) {}
+
+function _startChannelMediaRelay2_WEBGL(channel, srcChannelName, srcToken, srcUid, destChannelName, destToken, destUid, destCount) {
+ var srcChannelNameStr = Pointer_stringify(srcChannelName);
+ var srcTokenStr = Pointer_stringify(srcToken);
+ var destChannelNameStr = Pointer_stringify(destChannelName);
+ var destTokenStr = Pointer_stringify(destToken);
+ var srcUid_Str = Pointer_stringify(srcUid);
+ var destUid_Str = Pointer_stringify(destUid);
+ startChannelMediaRelay_MC(srcChannelNameStr, srcTokenStr, srcUid_Str, destChannelNameStr, destTokenStr, destUid_Str, destCount);
+}
+
+function _startChannelMediaRelay_WEBGL(srcChannelName, srcToken, srcUid, destChannelName, destToken, destUid, destCount) {
+ var srcChannelNameStr = Pointer_stringify(srcChannelName);
+ var srcTokenStr = Pointer_stringify(srcToken);
+ var destChannelNameStr = Pointer_stringify(destChannelName);
+ var destTokenStr = Pointer_stringify(destToken);
+ var srcUid_Str = Pointer_stringify(srcUid);
+ var destUid_Str = Pointer_stringify(destUid);
+ startChannelMediaRelay(srcChannelNameStr, srcTokenStr, srcUid_Str, destChannelNameStr, destTokenStr, destUid_Str, destCount);
+}
+
+function _startEchoTest() {}
+
+function _startEchoTest2(intervalInSeconds) {}
+
+function _startEchoTest3(view, enableAudio, enableVideo, token, channelId) {
+ SendNotImplementedError("startEchoTest3");
+}
+
+function _startLastmileProbeTest(probeUplink, probeDownlink, expectedUplinkBitrate, expectedDownlinkBitrate) {}
+
+function _startNewScreenCaptureForWeb(uid, enableAudio, token) {
+ var t = Pointer_stringify(token);
+ startNewScreenCaptureForWeb(uid, enableAudio, t);
+}
+
+function _startNewScreenCaptureForWeb2(uid, audioEnabled, token) {
+ var t = Pointer_stringify(token);
+ startNewScreenCaptureForWeb2(uid, audioEnabled, t);
+}
+
+function _startPreview() {
+ startPreview();
+}
+
+function _startRecording() {
+ SendNotImplementedError("startRecording");
+}
+
+function _startRecordingService(recordingKey) {}
+
+function _startRtmpStreamWithTranscoding(url, width, height, videoBitrate, videoFramerate, lowLatency, videoGroup, video_codec_profile, backgroundColor, userCount, transcodingUserInfo, transcodingExtraInfo, metaData, watermarkRtcImageUrl, watermarkRtcImageX, watermarkRtcImageY, watermarkRtcImageWidth, watermarkRtcImageHeight, watermarkImageZorder, watermarkImageAlpha, watermarkCount, backgroundImageRtcImageUrl, backgroundImageRtcImageX, backgroundImageRtcImageY, backgroundImageRtcImageWidth, backgroundImageRtcImageHeight, backgroundImageRtcImageZorder, backgroundImageRtcImageAlpha, backgroundImageRtcImageCount, audioSampleRate, audioBitrate, audioChannels, audioCodecProfile, advancedFeatures, advancedFeatureCount) {
+ SendNotImplementedError("startRtmpStreamWithTranscoding");
+}
+
+function _startRtmpStreamWithTranscoding2(channel, url, width, height, videoBitrate, videoFramerate, lowLatency, videoGroup, video_codec_profile, backgroundColor, userCount, transcodingUserInfo, transcodingExtraInfo, metaData, watermarkRtcImageUrl, watermarkRtcImageX, watermarkRtcImageY, watermarkRtcImageWidth, watermarkRtcImageHeight, watermarkImageZorder, watermarkImageAlpha, watermarkCount, backgroundImageRtcImageUrl, backgroundImageRtcImageX, backgroundImageRtcImageY, backgroundImageRtcImageWidth, backgroundImageRtcImageHeight, backgroundImageRtcImageZorder, backgroundImageRtcImageAlpha, backgroundImageRtcImageCount, audioSampleRate, audioBitrate, audioChannels, audioCodecProfile, advancedFeatures, advancedFeatureCount) {
+ SendNotImplementedError("startRtmpStreamWithTranscoding2");
+}
+
+function _startRtmpStreamWithoutTranscoding(url) {
+ SendNotImplementedError("startRtmpStreamWithoutTranscoding");
+}
+
+function _startRtmpStreamWithoutTranscoding2(channel, url) {
+ SendNotImplementedError("startRtmpStreamWithoutTranscoding2");
+}
+
+function _startScreenCaptureByDisplayId(displayId, x, y, width, height, screenCaptureVideoDimenWidth, screenCaptureVideoDimenHeight, screenCaptureFrameRate, screenCaptureBitrate, screenCaptureCaptureMouseCursor) {
+ startScreenCaptureByDisplayId(displayId, x, y, width, height, screenCaptureVideoDimenWidth, screenCaptureVideoDimenHeight, screenCaptureFrameRate, screenCaptureBitrate, screenCaptureCaptureMouseCursor);
+}
+
+function _startScreenCaptureByScreenRect(screenRectX, screenRectY, screenRectWidth, screenRectHeight, regionRectX, regionRectY, regionRectWidth, regionRectHeight, screenCaptureVideoDimenWidth, screenCaptureVideoDimenHeight, screenCaptureFrameRate, screenCaptureBitrate, screenCaptureCaptureMouseCursor) {}
+
+function _startScreenCaptureByWindowId(windowId, regionRectX, regionRectY, regionRectWidth, regionRectHeight, screenCaptureVideoDimenWidth, screenCaptureVideoDimenHeight, screenCaptureFrameRate, screenCaptureBitrate, screenCaptureCaptureMouseCursor) {}
+
+function _startScreenCaptureForWeb(enableAudio) {
+ startScreenCaptureForWeb(enableAudio);
+}
+
+function _startScreenCaptureForWeb2(enableAudio) {
+ startScreenCaptureForWeb2(enableAudio);
+}
+
+function _startVideoDeviceTest(hwnd) {}
+
+function _stopAllEffects() {
+ StopAllEffects();
+}
+
+function _stopAudioDeviceLoopbackTest() {
+ SendNotImplementedError("stopAudioDeviceLoopbackTest");
+}
+
+function _stopAudioMixing() {
+ StopAudioMixing();
+}
+
+function _stopAudioPlaybackDeviceTest() {}
+
+function _stopAudioRecording() {
+ stopAudioRecording_WGL();
+}
+
+function _stopAudioRecordingDeviceTest() {}
+
+function _stopChannelMediaRelay() {
+ stopChannelMediaRelay();
+}
+
+function _stopChannelMediaRelay2(channel) {
+ stopChannelMediaRelay_MC();
+}
+
+function _stopEchoTest() {}
+
+function _stopEffect(soundId) {
+ StopEffect(soundId);
+}
+
+function _stopLastmileProbeTest() {}
+
+function _stopNewScreenCaptureForWeb() {
+ console.log("SDK stopNewScreenCaptureForWeb");
+ stopNewScreenCaptureForWeb();
+}
+
+function _stopNewScreenCaptureForWeb2() {
+ console.log("SDK stopNewScreenCaptureForWeb2");
+ stopNewScreenCaptureForWeb2();
+}
+
+function _stopPreview() {
+ stopPreview();
+}
+
+function _stopRecording() {
+ SendNotImplementedError("stopRecording");
+}
+
+function _stopRecordingService(recordingKey) {}
+
+function _stopRtmpStream(url) {
+ SendNotImplementedError("stopRtmpStream");
+}
+
+function _stopRtmpStream2(channel, url) {
+ SendNotImplementedError("stopRtmpStream2");
+}
+
+function _stopScreenCapture() {
+ stopScreenCapture();
+}
+
+function _stopScreenCapture2() {
+ stopScreenCapture2();
+}
+
+function _stopVideoDeviceTest() {}
 
 function __isLeapYear(year) {
  return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
@@ -13851,6 +15318,22 @@ function _strftime(s, maxsize, format, tm) {
  return bytes.length - 1;
 }
 
+function _switchCamera() {
+ switchCamera();
+}
+
+function _switchChannel(token, channelId) {
+ var token_str = Pointer_stringify(token);
+ var channelId_str = Pointer_stringify(channelId);
+ switchChannel_WGL(token_str, channelId_str);
+}
+
+function _switchChannel2() {}
+
+function _takeSnapshot(channel, uid, filePath) {
+ SendNotImplementedError("takeSnapshot");
+}
+
 function _time(ptr) {
  var ret = Date.now() / 1e3 | 0;
  if (ptr) {
@@ -13858,6 +15341,177 @@ function _time(ptr) {
  }
  return ret;
 }
+
+function _unRegisterAudioRawDataObserver() {}
+
+function _unRegisterMediaMetadataObserver() {}
+
+function _unRegisterPacketObserver() {}
+
+function _unRegisterVideoRawDataObserver() {}
+
+function _unloadEffect(soundId) {
+ UnloadEffect(soundId);
+}
+
+function _unpublish(channel) {
+ unpublish_mc_WGL();
+}
+
+function _updateChannelMediaRelay(srcChannelName, srcToken, srcUid, destChannelName, destToken, destUid, destCount) {}
+
+function _updateChannelMediaRelay2(channel, srcChannelName, srcToken, srcUid, destChannelName, destToken, destUid, destCount) {}
+
+function _updateChannelMediaRelay2_WEBGL(channel, srcChannelName, srcToken, srcUid, destChannelName, destToken, destUid, destCount) {
+ var srcChannelNameStr = Pointer_stringify(srcChannelName);
+ var srcTokenStr = Pointer_stringify(srcToken);
+ var destChannelNameStr = Pointer_stringify(destChannelName);
+ var destTokenStr = Pointer_stringify(destToken);
+ var srcUid_Str = Pointer_stringify(srcUid);
+ var destUid_Str = Pointer_stringify(destUid);
+ updateChannelMediaRelay_MC(srcChannelNameStr, srcTokenStr, srcUid_Str, destChannelNameStr, destTokenStr, destUid_Str, destCount);
+}
+
+function _updateChannelMediaRelay_WEBGL(srcChannelName, srcToken, srcUid, destChannelName, destToken, destUid, destCount) {
+ var srcChannelNameStr = Pointer_stringify(srcChannelName);
+ var srcTokenStr = Pointer_stringify(srcToken);
+ var destChannelNameStr = Pointer_stringify(destChannelName);
+ var destTokenStr = Pointer_stringify(destToken);
+ var srcUid_Str = Pointer_stringify(srcUid);
+ var destUid_Str = Pointer_stringify(destUid);
+ updateChannelMediaRelay(srcChannelNameStr, srcTokenStr, srcUid_Str, destChannelNameStr, destTokenStr, destUid_Str, destCount);
+}
+
+function _updateLocalTexture(tex, isLinearColor) {
+ var lVid = undefined;
+ if (localTracks != undefined) {
+  if (localTracks.videoTrack != undefined) {
+   if (localTracks.videoTrack._player != undefined) {
+    lVid = localTracks.videoTrack._player.videoElement;
+   }
+  }
+ }
+ if (lVid == undefined) {
+  return;
+ }
+ localVideo = lVid;
+ if (localVideo == null) {
+  return false;
+ }
+ var v = localVideo;
+ if (!(v.videoWidth > 0 && v.videoHeight > 0)) {
+  return false;
+ }
+ GLctx.deleteTexture(GL.textures[tex]);
+ var t = GLctx.createTexture();
+ t.name = tex;
+ GL.textures[tex] = t;
+ GLctx.bindTexture(GLctx.TEXTURE_2D, GL.textures[tex]);
+ GLctx.texParameteri(GLctx.TEXTURE_2D, GLctx.TEXTURE_WRAP_S, GLctx.CLAMP_TO_EDGE);
+ GLctx.texParameteri(GLctx.TEXTURE_2D, GLctx.TEXTURE_WRAP_T, GLctx.CLAMP_TO_EDGE);
+ GLctx.texParameteri(GLctx.TEXTURE_2D, GLctx.TEXTURE_MIN_FILTER, GLctx.LINEAR);
+ var internalformat = GLctx.RGBA;
+ if (isLinearColor) internalformat = GLctx.SRGB8_ALPHA8;
+ GLctx.texImage2D(GLctx.TEXTURE_2D, 0, internalformat, GLctx.RGBA, GLctx.UNSIGNED_BYTE, v);
+ return true;
+}
+
+function _updateRemotePosition(uid, pos, forward) {}
+
+function _updateRemoteTexture(userId, tex, isLinearColor) {
+ var ch_userId = Pointer_stringify(userId);
+ var lVid = undefined;
+ if (remoteUsers[ch_userId] != undefined) {
+  if (remoteUsers[ch_userId].videoTrack != undefined) {
+   if (remoteUsers[ch_userId].videoTrack._player != undefined) {
+    lVid = remoteUsers[ch_userId].videoTrack._player.videoElement;
+   }
+  }
+ }
+ if (lVid == undefined) {
+  return;
+ }
+ var v = lVid;
+ if (!(v.videoWidth > 0 && v.videoHeight > 0)) return false;
+ if (1) {
+  GLctx.deleteTexture(GL.textures[tex]);
+  var t = GLctx.createTexture();
+  t.name = tex;
+  GL.textures[tex] = t;
+  GLctx.bindTexture(GLctx.TEXTURE_2D, t);
+  GLctx.texParameteri(GLctx.TEXTURE_2D, GLctx.TEXTURE_WRAP_S, GLctx.CLAMP_TO_EDGE);
+  GLctx.texParameteri(GLctx.TEXTURE_2D, GLctx.TEXTURE_WRAP_T, GLctx.CLAMP_TO_EDGE);
+  GLctx.texParameteri(GLctx.TEXTURE_2D, GLctx.TEXTURE_MIN_FILTER, GLctx.LINEAR);
+  var internalformat = GLctx.RGBA;
+  if (isLinearColor) internalformat = GLctx.SRGB8_ALPHA8;
+  GLctx.texImage2D(GLctx.TEXTURE_2D, 0, internalformat, GLctx.RGBA, GLctx.UNSIGNED_BYTE, v);
+  v.previousUploadedWidth = v.videoWidth;
+  v.previousUploadedHeight = v.videoHeight;
+ }
+ return true;
+}
+
+function _updateRemoteTexture_MC(channel, userId, tex) {
+ var ch_userId = Pointer_stringify(userId);
+ var channelId_str = Pointer_stringify(channel);
+ var clientmc = find_mc_client(channelId_str);
+ var lVid = undefined;
+ if (clientmc != null) {
+  if (clientmc.remoteUsers[ch_userId] != undefined) {
+   if (clientmc.remoteUsers[ch_userId].videoTrack != undefined) {
+    if (clientmc.remoteUsers[ch_userId].videoTrack._player != undefined) {
+     lVid = clientmc.remoteUsers[ch_userId].videoTrack._player.videoElement;
+    }
+   }
+  }
+ }
+ if (lVid == undefined) {
+  return;
+ }
+ var v = lVid;
+ if (!(v.videoWidth > 0 && v.videoHeight > 0)) return false;
+ var internalformat = GLctx.RGBA;
+ if (isLinearColor) internalformat = GLctx.SRGB8_ALPHA8;
+ if (1) {
+  GLctx.deleteTexture(GL.textures[tex]);
+  var t = GLctx.createTexture();
+  t.name = tex;
+  GL.textures[tex] = t;
+  GLctx.bindTexture(GLctx.TEXTURE_2D, t);
+  GLctx.texParameteri(GLctx.TEXTURE_2D, GLctx.TEXTURE_WRAP_S, GLctx.CLAMP_TO_EDGE);
+  GLctx.texParameteri(GLctx.TEXTURE_2D, GLctx.TEXTURE_WRAP_T, GLctx.CLAMP_TO_EDGE);
+  GLctx.texParameteri(GLctx.TEXTURE_2D, GLctx.TEXTURE_MIN_FILTER, GLctx.LINEAR);
+  GLctx.texImage2D(GLctx.TEXTURE_2D, 0, internalformat, GLctx.RGBA, GLctx.UNSIGNED_BYTE, v);
+  v.previousUploadedWidth = v.videoWidth;
+  v.previousUploadedHeight = v.videoHeight;
+ } else {
+  GLctx.bindTexture(GLctx.TEXTURE_2D, GL.textures[tex]);
+  GLctx.texImage2D(GLctx.TEXTURE_2D, 0, internalformat, GLctx.RGBA, GLctx.UNSIGNED_BYTE, v);
+ }
+ return true;
+}
+
+function _updateRtmpTranscoding(width, height, videoBitrate, videoFramerate, lowLatency, videoGroup, video_codec_profile, backgroundColor, userCount, transcodingUserInfo, transcodingExtraInfo, metaData, watermarkRtcImageUrl, watermarkRtcImageX, watermarkRtcImageY, watermarkRtcImageWidth, watermarkRtcImageHeight, watermarkImageZorder, watermarkImageAlpha, watermarkCount, backgroundImageRtcImageUrl, backgroundImageRtcImageX, backgroundImageRtcImageY, backgroundImageRtcImageWidth, backgroundImageRtcImageHeight, backgroundImageRtcImageZorder, backgroundImageRtcImageAlpha, backgroundImageRtcImageCount, audioSampleRate, audioBitrate, audioChannels, audioCodecProfile, advancedFeatures, advancedFeatureCount) {
+ SendNotImplementedError("updateRtmpTranscoding");
+}
+
+function _updateRtmpTranscoding2(channel, width, height, videoBitrate, videoFramerate, lowLatency, videoGroup, video_codec_profile, backgroundColor, userCount, transcodingUserInfo, transcodingExtraInfo, metaData, watermarkRtcImageUrl, watermarkRtcImageX, watermarkRtcImageY, watermarkRtcImageWidth, watermarkRtcImageHeight, watermarkImageZorder, watermarkImageAlpha, watermarkCount, backgroundImageRtcImageUrl, backgroundImageRtcImageX, backgroundImageRtcImageY, backgroundImageRtcImageWidth, backgroundImageRtcImageHeight, backgroundImageRtcImageZorder, backgroundImageRtcImageAlpha, backgroundImageRtcImageCount, audioSampleRate, audioBitrate, audioChannels, audioCodecProfile, advancedFeatures, advancedFeatureCount) {
+ SendNotImplementedError("updateRtmpTranscoding2");
+}
+
+function _updateScreenCaptureParameters(screenCaptureVideoDimenWidth, screenCaptureVideoDimenHeight, screenCaptureFrameRate, screenCaptureBitrate, screenCaptureCaptureMouseCursor) {}
+
+function _updateScreenCaptureRegion(x, y, width, height) {}
+
+function _updateSelfPosition(pos, forward, right, up) {}
+
+function _updateTexture() {}
+
+function _updateVideoRawData(data, channelId, uid) {}
+
+function _updateVideoRawData2(data, channelId, uid) {}
+
+function _uploadLogFile() {}
 
 function setFileTime(path, time) {
  path = UTF8ToString(path);
@@ -14076,6 +15730,7 @@ var asmLibraryArg = {
  "JS_WebRequest_SetRedirectLimit": _JS_WebRequest_SetRedirectLimit,
  "JS_WebRequest_SetRequestHeader": _JS_WebRequest_SetRequestHeader,
  "JS_WebRequest_SetTimeout": _JS_WebRequest_SetTimeout,
+ "ReleaseChannel": _ReleaseChannel,
  "SendAsyncError": _SendAsyncError,
  "SendAsyncJs": _SendAsyncJs,
  "SendAsyncResponse": _SendAsyncResponse,
@@ -14158,11 +15813,54 @@ var asmLibraryArg = {
  "__sys_uname": ___sys_uname,
  "__sys_unlink": ___sys_unlink,
  "abort": _abort,
+ "addInjectStreamUrl": _addInjectStreamUrl,
+ "addInjectStreamUrl2": _addInjectStreamUrl2,
+ "addPublishStreamUrl": _addPublishStreamUrl,
+ "addPublishStreamUrl2": _addPublishStreamUrl2,
+ "addUserVideoInfo": _addUserVideoInfo,
+ "addUserVideoInfo2": _addUserVideoInfo2,
+ "addVideoWatermark": _addVideoWatermark,
+ "addVideoWatermark2": _addVideoWatermark2,
+ "adjustAudioMixingPlayoutVolume": _adjustAudioMixingPlayoutVolume,
+ "adjustAudioMixingPublishVolume": _adjustAudioMixingPublishVolume,
+ "adjustAudioMixingVolume": _adjustAudioMixingVolume,
+ "adjustLoopbackRecordingSignalVolume": _adjustLoopbackRecordingSignalVolume,
+ "adjustPlaybackSignalVolume": _adjustPlaybackSignalVolume,
+ "adjustRecordingSignalVolume": _adjustRecordingSignalVolume,
+ "adjustUserPlaybackSignalVolume": _adjustUserPlaybackSignalVolume,
+ "adjustUserPlaybackSignalVolume2": _adjustUserPlaybackSignalVolume2,
+ "adjustUserPlaybackSignalVolume2_WGLM": _adjustUserPlaybackSignalVolume2_WGLM,
+ "adjustUserPlaybackSignalVolume_WGLM": _adjustUserPlaybackSignalVolume_WGLM,
  "atexit": _atexit,
+ "channelId": _channelId,
+ "clearRemotePositions": _clearRemotePositions,
+ "clearVideoWatermarks": _clearVideoWatermarks,
  "clock": _clock,
  "clock_getres": _clock_getres,
  "clock_gettime": _clock_gettime,
+ "complain": _complain,
+ "configPublisher": _configPublisher,
+ "creatAAudioPlaybackDeviceManager": _creatAAudioPlaybackDeviceManager,
+ "creatAAudioRecordingDeviceManager": _creatAAudioRecordingDeviceManager,
+ "createAVideoDeviceManager": _createAVideoDeviceManager,
+ "createChannel": _createChannel,
+ "createDataStream": _createDataStream,
+ "createDataStream2": _createDataStream2,
+ "createDataStream_channel": _createDataStream_channel,
+ "createDataStream_engine": _createDataStream_engine,
+ "createEngine": _createEngine,
+ "createEngine2": _createEngine2,
+ "createLocalTexture": _createLocalTexture,
+ "createMediaRecorder": _createMediaRecorder,
+ "createRemoteTexture": _createRemoteTexture,
+ "deleteEngine": _deleteEngine,
+ "deleteTexture": _deleteTexture,
  "difftime": _difftime,
+ "disableAudio": _disableAudio,
+ "disableLastmileTest": _disableLastmileTest,
+ "disableLogUpload": _disableLogUpload,
+ "disableVideo": _disableVideo,
+ "disableVideoObserver": _disableVideoObserver,
  "dlclose": _dlclose,
  "dlerror": _dlerror,
  "dlopen": _dlopen,
@@ -14215,6 +15913,34 @@ var asmLibraryArg = {
  "emscripten_webgl_get_current_context": _emscripten_webgl_get_current_context,
  "emscripten_webgl_init_context_attributes": _emscripten_webgl_init_context_attributes,
  "emscripten_webgl_make_context_current": _emscripten_webgl_make_context_current,
+ "enableAudio": _enableAudio,
+ "enableAudioVolumeIndication": _enableAudioVolumeIndication,
+ "enableAudioVolumeIndication2": _enableAudioVolumeIndication2,
+ "enableContentInspect": _enableContentInspect,
+ "enableDeepLearningDenoise": _enableDeepLearningDenoise,
+ "enableDualStreamMode": _enableDualStreamMode,
+ "enableEncryption": _enableEncryption,
+ "enableEncryption2": _enableEncryption2,
+ "enableFaceDetection": _enableFaceDetection,
+ "enableInEarMonitoring": _enableInEarMonitoring,
+ "enableLastmileTest": _enableLastmileTest,
+ "enableLocalAudio": _enableLocalAudio,
+ "enableLocalVideo": _enableLocalVideo,
+ "enableLocalVoicePitchCallback": _enableLocalVoicePitchCallback,
+ "enableLogUpload": _enableLogUpload,
+ "enableLoopbackRecording": _enableLoopbackRecording,
+ "enableRemoteSuperResolution": _enableRemoteSuperResolution,
+ "enableRemoteSuperResolution2": _enableRemoteSuperResolution2,
+ "enableRemoteSuperResolution3": _enableRemoteSuperResolution3,
+ "enableRemoteSuperResolution4": _enableRemoteSuperResolution4,
+ "enableSoundPositionIndication": _enableSoundPositionIndication,
+ "enableSpatialAudio": _enableSpatialAudio,
+ "enableSpatialAudio_MC": _enableSpatialAudio_MC,
+ "enableVideo": _enableVideo,
+ "enableVideoObserver": _enableVideoObserver,
+ "enableVirtualBackground": _enableVirtualBackground,
+ "enableWebSdkInteroperability": _enableWebSdkInteroperability,
+ "enableWirelessAccelerate": _enableWirelessAccelerate,
  "environ_get": _environ_get,
  "environ_sizes_get": _environ_sizes_get,
  "exit": _exit,
@@ -14224,7 +15950,59 @@ var asmLibraryArg = {
  "fd_seek": _fd_seek,
  "fd_write": _fd_write,
  "flock": _flock,
+ "followSystemPlaybackDevice": _followSystemPlaybackDevice,
+ "followSystemRecordingDevice": _followSystemRecordingDevice,
+ "freeObject": _freeObject,
+ "generateNativeTexture": _generateNativeTexture,
+ "getAudioFileInfo": _getAudioFileInfo,
+ "getAudioMixingCurrentPosition": _getAudioMixingCurrentPosition,
+ "getAudioMixingDuration": _getAudioMixingDuration,
+ "getAudioMixingDuration2": _getAudioMixingDuration2,
+ "getAudioMixingPlayoutVolume": _getAudioMixingPlayoutVolume,
+ "getAudioMixingPublishVolume": _getAudioMixingPublishVolume,
+ "getAudioPlaybackDefaultDevice": _getAudioPlaybackDefaultDevice,
+ "getAudioPlaybackDevice": _getAudioPlaybackDevice,
+ "getAudioPlaybackDeviceCount": _getAudioPlaybackDeviceCount,
+ "getAudioPlaybackDeviceVolume": _getAudioPlaybackDeviceVolume,
+ "getAudioRecordingDefaultDevice": _getAudioRecordingDefaultDevice,
+ "getAudioRecordingDevice": _getAudioRecordingDevice,
+ "getAudioRecordingDeviceCount": _getAudioRecordingDeviceCount,
+ "getAudioRecordingDeviceVolume": _getAudioRecordingDeviceVolume,
+ "getAudioTrackCount": _getAudioTrackCount,
+ "getCallId": _getCallId,
+ "getCallId2": _getCallId2,
+ "getCameraMaxZoomFactor": _getCameraMaxZoomFactor,
+ "getConnectionState": _getConnectionState,
+ "getConnectionState2": _getConnectionState2,
+ "getCurrentPlaybackDevice": _getCurrentPlaybackDevice,
+ "getCurrentPlaybackDeviceInfo": _getCurrentPlaybackDeviceInfo,
+ "getCurrentRecordingDevice": _getCurrentRecordingDevice,
+ "getCurrentRecordingDeviceInfo": _getCurrentRecordingDeviceInfo,
+ "getCurrentVideoDevice": _getCurrentVideoDevice,
+ "getEffectCurrentPosition": _getEffectCurrentPosition,
+ "getEffectDuration": _getEffectDuration,
+ "getEffectsVolume": _getEffectsVolume,
+ "getErrorDescription": _getErrorDescription,
+ "getMultiChannelWanted": _getMultiChannelWanted,
+ "getRemoteVideoStats_MC": _getRemoteVideoStats_MC,
+ "getRemoteVideoStats_WGL": _getRemoteVideoStats_WGL,
+ "getScreenCaptureIconImage": _getScreenCaptureIconImage,
+ "getScreenCaptureIsPrimaryMonitor": _getScreenCaptureIsPrimaryMonitor,
+ "getScreenCaptureSourceId": _getScreenCaptureSourceId,
+ "getScreenCaptureSourceName": _getScreenCaptureSourceName,
+ "getScreenCaptureSourceProcessPath": _getScreenCaptureSourceProcessPath,
+ "getScreenCaptureSourceTitle": _getScreenCaptureSourceTitle,
+ "getScreenCaptureSourceType": _getScreenCaptureSourceType,
+ "getScreenCaptureSources": _getScreenCaptureSources,
+ "getScreenCaptureSourcesCount": _getScreenCaptureSourcesCount,
+ "getScreenCaptureThumbImage": _getScreenCaptureThumbImage,
+ "getSdkVersion": _getSdkVersion,
  "getTempRet0": _getTempRet0,
+ "getUserInfoByUid": _getUserInfoByUid,
+ "getUserInfoByUid_WGL": _getUserInfoByUid_WGL,
+ "getUserInfoByUserAccount": _getUserInfoByUserAccount,
+ "getVideoDeviceCollectionCount": _getVideoDeviceCollectionCount,
+ "getVideoDeviceCollectionDevice": _getVideoDeviceCollectionDevice,
  "getaddrinfo": _getaddrinfo,
  "gethostbyaddr": _gethostbyaddr,
  "gethostbyname": _gethostbyname,
@@ -14397,6 +16175,19 @@ var asmLibraryArg = {
  "glVertexAttribIPointer": _glVertexAttribIPointer,
  "glVertexAttribPointer": _glVertexAttribPointer,
  "glViewport": _glViewport,
+ "initChannelEventCallback": _initChannelEventCallback,
+ "initEventOnCaptureVideoFrame": _initEventOnCaptureVideoFrame,
+ "initEventOnEngineCallback": _initEventOnEngineCallback,
+ "initEventOnMediaRecorderCallback": _initEventOnMediaRecorderCallback,
+ "initEventOnMetaDataCallback": _initEventOnMetaDataCallback,
+ "initEventOnMixedAudioFrame": _initEventOnMixedAudioFrame,
+ "initEventOnPacketCallback": _initEventOnPacketCallback,
+ "initEventOnPlaybackAudioFrame": _initEventOnPlaybackAudioFrame,
+ "initEventOnPlaybackAudioFrameBeforeMixing": _initEventOnPlaybackAudioFrameBeforeMixing,
+ "initEventOnPullAudioFrame": _initEventOnPullAudioFrame,
+ "initEventOnRecordAudioFrame": _initEventOnRecordAudioFrame,
+ "initEventOnRenderVideoFrame": _initEventOnRenderVideoFrame,
+ "initVirtualBackground_MC": _initVirtualBackground_MC,
  "invoke_dddi": invoke_dddi,
  "invoke_di": invoke_di,
  "invoke_dii": invoke_dii,
@@ -14423,6 +16214,7 @@ var asmLibraryArg = {
  "invoke_iiifi": invoke_iiifi,
  "invoke_iiifii": invoke_iiifii,
  "invoke_iiii": invoke_iiii,
+ "invoke_iiiidd": invoke_iiiidd,
  "invoke_iiiidii": invoke_iiiidii,
  "invoke_iiiifii": invoke_iiiifii,
  "invoke_iiiii": invoke_iiiii,
@@ -14510,6 +16302,16 @@ var asmLibraryArg = {
  "invoke_viiiiiiiiiii": invoke_viiiiiiiiiii,
  "invoke_viiiiiiiiiiii": invoke_viiiiiiiiiiii,
  "invoke_viiiiiiiiiiiii": invoke_viiiiiiiiiiiii,
+ "invoke_viiiiiiiiiiiiii": invoke_viiiiiiiiiiiiii,
+ "invoke_viiiiiiiiiiiiiii": invoke_viiiiiiiiiiiiiii,
+ "invoke_viiiiiiiiiiiiiiii": invoke_viiiiiiiiiiiiiiii,
+ "invoke_viiiiiiiiiiiiiiiii": invoke_viiiiiiiiiiiiiiiii,
+ "invoke_viiiiiiiiiiiiiiiiiddiddii": invoke_viiiiiiiiiiiiiiiiiddiddii,
+ "invoke_viiiiiiiiiiiiiiiiiiddiddii": invoke_viiiiiiiiiiiiiiiiiiddiddii,
+ "invoke_viiiiiiiji": invoke_viiiiiiiji,
+ "invoke_viiiiiiijii": invoke_viiiiiiijii,
+ "invoke_viiiiiiji": invoke_viiiiiiji,
+ "invoke_viiiiiijii": invoke_viiiiiijii,
  "invoke_viiij": invoke_viiij,
  "invoke_viiiji": invoke_viiiji,
  "invoke_viij": invoke_viij,
@@ -14525,13 +16327,298 @@ var asmLibraryArg = {
  "invoke_vji": invoke_vji,
  "invoke_vjiiiii": invoke_vjiiiii,
  "invoke_vjjjiiii": invoke_vjjjiiii,
+ "isAudioPlaybackDeviceMute": _isAudioPlaybackDeviceMute,
+ "isAudioRecordingDeviceMute": _isAudioRecordingDeviceMute,
+ "isCameraAutoFocusFaceModeSupported": _isCameraAutoFocusFaceModeSupported,
+ "isCameraExposurePositionSupported": _isCameraExposurePositionSupported,
+ "isCameraFocusSupported": _isCameraFocusSupported,
+ "isCameraTorchSupported": _isCameraTorchSupported,
+ "isCameraZoomSupported": _isCameraZoomSupported,
+ "isLocalVideoReady": _isLocalVideoReady,
+ "isRemoteVideoReady": _isRemoteVideoReady,
+ "isRemoteVideoReady_MC": _isRemoteVideoReady_MC,
+ "isSpeakerphoneEnabled": _isSpeakerphoneEnabled,
+ "joinChannel": _joinChannel,
+ "joinChannel2": _joinChannel2,
+ "joinChannelWithMediaOption": _joinChannelWithMediaOption,
+ "joinChannelWithUserAccount": _joinChannelWithUserAccount,
+ "joinChannelWithUserAccount2": _joinChannelWithUserAccount2,
+ "joinChannelWithUserAccount_engine": _joinChannelWithUserAccount_engine,
+ "leaveChannel": _leaveChannel,
+ "leaveChannel2": _leaveChannel2,
  "llvm_eh_typeid_for": _llvm_eh_typeid_for,
+ "localSpatialAudio_initialize": _localSpatialAudio_initialize,
+ "localSpatialAudio_release": _localSpatialAudio_release,
+ "localSpatialAudio_setParameters": _localSpatialAudio_setParameters,
  "mktime": _mktime,
+ "muteAllRemoteAudioStreams": _muteAllRemoteAudioStreams,
+ "muteAllRemoteAudioStreams2": _muteAllRemoteAudioStreams2,
+ "muteAllRemoteAudioStreams_spatialAudio": _muteAllRemoteAudioStreams_spatialAudio,
+ "muteAllRemoteVideoStreams": _muteAllRemoteVideoStreams,
+ "muteAllRemoteVideoStreams2": _muteAllRemoteVideoStreams2,
+ "muteLocalAudioStream": _muteLocalAudioStream,
+ "muteLocalAudioStream_channel": _muteLocalAudioStream_channel,
+ "muteLocalAudioStream_spatialAudio": _muteLocalAudioStream_spatialAudio,
+ "muteLocalVideoStream": _muteLocalVideoStream,
+ "muteLocalVideoStream_channel": _muteLocalVideoStream_channel,
+ "muteRemoteAudioStream": _muteRemoteAudioStream,
+ "muteRemoteAudioStream2": _muteRemoteAudioStream2,
+ "muteRemoteAudioStream2_WGLM": _muteRemoteAudioStream2_WGLM,
+ "muteRemoteAudioStream_WGLM": _muteRemoteAudioStream_WGLM,
+ "muteRemoteVideoStream": _muteRemoteVideoStream,
+ "muteRemoteVideoStream2": _muteRemoteVideoStream2,
+ "muteRemoteVideoStream2_WGLM": _muteRemoteVideoStream2_WGLM,
+ "muteRemoteVideoStream_WGLM": _muteRemoteVideoStream_WGLM,
+ "pauseAllChannelMediaRelay": _pauseAllChannelMediaRelay,
+ "pauseAllEffects": _pauseAllEffects,
+ "pauseAudioMixing": _pauseAudioMixing,
+ "pauseEffect": _pauseEffect,
+ "playEffect": _playEffect,
+ "playEffect2": _playEffect2,
+ "preloadEffect": _preloadEffect,
+ "publish": _publish,
+ "pullAudioFrame_": _pullAudioFrame_,
+ "pushAudioFrame3_": _pushAudioFrame3_,
+ "pushAudioFrame_": _pushAudioFrame_,
+ "pushVideoFrame": _pushVideoFrame,
+ "pushVideoFrame2": _pushVideoFrame2,
+ "pushVideoFrameWGL": _pushVideoFrameWGL,
+ "rate": _rate,
+ "refreshRecordingServiceStatus": _refreshRecordingServiceStatus,
+ "registerAudioRawDataObserver": _registerAudioRawDataObserver,
+ "registerLocalUserAccount": _registerLocalUserAccount,
+ "registerMediaMetadataObserver": _registerMediaMetadataObserver,
+ "registerPacketObserver": _registerPacketObserver,
+ "registerVideoRawDataObserver": _registerVideoRawDataObserver,
+ "releaseAAudioPlaybackDeviceManager": _releaseAAudioPlaybackDeviceManager,
+ "releaseAAudioRecordingDeviceManager": _releaseAAudioRecordingDeviceManager,
+ "releaseAVideoDeviceManager": _releaseAVideoDeviceManager,
+ "releaseMediaRecorder": _releaseMediaRecorder,
+ "removeInjectStreamUrl": _removeInjectStreamUrl,
+ "removeInjectStreamUrl2": _removeInjectStreamUrl2,
+ "removePublishStreamUrl": _removePublishStreamUrl,
+ "removePublishStreamUrl2": _removePublishStreamUrl2,
+ "removeRemotePosition": _removeRemotePosition,
+ "removeUserVideoInfo": _removeUserVideoInfo,
+ "removeUserVideoInfo2": _removeUserVideoInfo2,
+ "renewToken": _renewToken,
+ "renewToken2": _renewToken2,
+ "resumeAllChannelMediaRelay": _resumeAllChannelMediaRelay,
+ "resumeAllEffects": _resumeAllEffects,
+ "resumeAudioMixing": _resumeAudioMixing,
+ "resumeEffect": _resumeEffect,
+ "selectAudioTrack": _selectAudioTrack,
+ "sendCustomReportMessage": _sendCustomReportMessage,
+ "sendMetadata": _sendMetadata,
+ "sendStreamMessage": _sendStreamMessage,
+ "sendStreamMessage2": _sendStreamMessage2,
+ "setAVSyncSource": _setAVSyncSource,
+ "setAVSyncSource2": _setAVSyncSource2,
+ "setAudioEffectParameters": _setAudioEffectParameters,
+ "setAudioEffectPreset": _setAudioEffectPreset,
+ "setAudioMixingDualMonoMode": _setAudioMixingDualMonoMode,
+ "setAudioMixingPitch": _setAudioMixingPitch,
+ "setAudioMixingPlaybackSpeed": _setAudioMixingPlaybackSpeed,
+ "setAudioMixingPosition": _setAudioMixingPosition,
+ "setAudioPlaybackDevice": _setAudioPlaybackDevice,
+ "setAudioPlaybackDeviceMute": _setAudioPlaybackDeviceMute,
+ "setAudioPlaybackDeviceVolume": _setAudioPlaybackDeviceVolume,
+ "setAudioProfile": _setAudioProfile,
+ "setAudioRecordingCollectionDeviceWGL": _setAudioRecordingCollectionDeviceWGL,
+ "setAudioRecordingDevice": _setAudioRecordingDevice,
+ "setAudioRecordingDeviceMute": _setAudioRecordingDeviceMute,
+ "setAudioRecordingDeviceVolume": _setAudioRecordingDeviceVolume,
+ "setAudioRecvRange": _setAudioRecvRange,
+ "setAudioSessionOperationRestriction": _setAudioSessionOperationRestriction,
+ "setBeautyEffectOptions": _setBeautyEffectOptions,
+ "setCameraAutoFocusFaceModeEnabled": _setCameraAutoFocusFaceModeEnabled,
+ "setCameraCaptureRotation": _setCameraCaptureRotation,
+ "setCameraCapturerConfiguration": _setCameraCapturerConfiguration,
+ "setCameraExposurePosition": _setCameraExposurePosition,
+ "setCameraFocusPositionInPreview": _setCameraFocusPositionInPreview,
+ "setCameraTorchOn": _setCameraTorchOn,
+ "setCameraZoomFactor": _setCameraZoomFactor,
+ "setChannelProfile": _setChannelProfile,
+ "setClientRole": _setClientRole,
+ "setClientRole2": _setClientRole2,
+ "setClientRole_1": _setClientRole_1,
+ "setClientRole_2": _setClientRole_2,
+ "setCloudProxy": _setCloudProxy,
+ "setColorEnhanceOptions": _setColorEnhanceOptions,
+ "setCurrentChannel_WGL": _setCurrentChannel_WGL,
+ "setDefaultAudioRoutetoSpeakerphone": _setDefaultAudioRoutetoSpeakerphone,
+ "setDefaultEngineSettings": _setDefaultEngineSettings,
+ "setDefaultMuteAllRemoteAudioStreams": _setDefaultMuteAllRemoteAudioStreams,
+ "setDefaultMuteAllRemoteAudioStreams2": _setDefaultMuteAllRemoteAudioStreams2,
+ "setDefaultMuteAllRemoteVideoStreams": _setDefaultMuteAllRemoteVideoStreams,
+ "setDefaultMuteAllRemoteVideoStreams2": _setDefaultMuteAllRemoteVideoStreams2,
+ "setDistanceUnit": _setDistanceUnit,
+ "setEffectPosition": _setEffectPosition,
+ "setEffectsVolume": _setEffectsVolume,
+ "setEnableSpeakerphone": _setEnableSpeakerphone,
+ "setEncryptionMode": _setEncryptionMode,
+ "setEncryptionMode2": _setEncryptionMode2,
+ "setEncryptionSecret": _setEncryptionSecret,
+ "setEncryptionSecret2": _setEncryptionSecret2,
+ "setExternalAudioSink": _setExternalAudioSink,
+ "setExternalAudioSource": _setExternalAudioSource,
+ "setExternalAudioSourceVolume": _setExternalAudioSourceVolume,
+ "setExternalVideoSource": _setExternalVideoSource,
+ "setHighQualityAudioParametersWithFullband": _setHighQualityAudioParametersWithFullband,
+ "setInEarMonitoringVolume": _setInEarMonitoringVolume,
+ "setLiveTranscoding": _setLiveTranscoding,
+ "setLiveTranscoding2": _setLiveTranscoding2,
+ "setLocalAccessPoint": _setLocalAccessPoint,
+ "setLocalPublishFallbackOption": _setLocalPublishFallbackOption,
+ "setLocalRenderMode": _setLocalRenderMode,
+ "setLocalVideoMirrorMode": _setLocalVideoMirrorMode,
+ "setLocalVoiceChanger": _setLocalVoiceChanger,
+ "setLocalVoiceEqualization": _setLocalVoiceEqualization,
+ "setLocalVoicePitch": _setLocalVoicePitch,
+ "setLocalVoiceReverb": _setLocalVoiceReverb,
+ "setLocalVoiceReverbPreset": _setLocalVoiceReverbPreset,
+ "setLogFile": _setLogFile,
+ "setLogFileSize": _setLogFileSize,
+ "setLogFilter": _setLogFilter,
+ "setLowlightEnhanceOptions": _setLowlightEnhanceOptions,
+ "setMaxAudioRecvCount": _setMaxAudioRecvCount,
+ "setMirrorApplied": _setMirrorApplied,
+ "setMixedAudioFrameParameters": _setMixedAudioFrameParameters,
+ "setMultiChannelWant": _setMultiChannelWant,
+ "setParameters": _setParameters,
+ "setPlaybackAudioFrameParameters": _setPlaybackAudioFrameParameters,
+ "setPlaybackCollectionDeviceWGL": _setPlaybackCollectionDeviceWGL,
+ "setPlaybackDeviceVolume": _setPlaybackDeviceVolume,
+ "setRecordingAudioFrameParameters": _setRecordingAudioFrameParameters,
+ "setRemoteDefaultVideoStreamType": _setRemoteDefaultVideoStreamType,
+ "setRemoteDefaultVideoStreamType2": _setRemoteDefaultVideoStreamType2,
+ "setRemoteRenderMode": _setRemoteRenderMode,
+ "setRemoteRenderMode2": _setRemoteRenderMode2,
+ "setRemoteSubscribeFallbackOption": _setRemoteSubscribeFallbackOption,
+ "setRemoteUserPriority": _setRemoteUserPriority,
+ "setRemoteUserPriority2": _setRemoteUserPriority2,
+ "setRemoteUserPriority2_WGLM": _setRemoteUserPriority2_WGLM,
+ "setRemoteUserPriority_WGL": _setRemoteUserPriority_WGL,
+ "setRemoteUserSpatialAudioParams": _setRemoteUserSpatialAudioParams,
+ "setRemoteUserSpatialAudioParams2": _setRemoteUserSpatialAudioParams2,
+ "setRemoteVideoStreamType": _setRemoteVideoStreamType,
+ "setRemoteVideoStreamType2": _setRemoteVideoStreamType2,
+ "setRemoteVideoStreamType2_WGLM": _setRemoteVideoStreamType2_WGLM,
+ "setRemoteVoicePosition": _setRemoteVoicePosition,
+ "setRemoteVoicePosition2": _setRemoteVoicePosition2,
+ "setRenderMode": _setRenderMode,
+ "setScreenCaptureContentHint": _setScreenCaptureContentHint,
+ "setScreenCaptureScenario": _setScreenCaptureScenario,
+ "setSpeakerphoneVolume": _setSpeakerphoneVolume,
  "setTempRet0": _setTempRet0,
+ "setVideoDenoiserOptions": _setVideoDenoiserOptions,
+ "setVideoDeviceCollectionDevice": _setVideoDeviceCollectionDevice,
+ "setVideoDeviceCollectionDeviceWGL": _setVideoDeviceCollectionDeviceWGL,
+ "setVideoEncoderConfiguration": _setVideoEncoderConfiguration,
+ "setVideoProfile": _setVideoProfile,
+ "setVideoQualityParameters": _setVideoQualityParameters,
+ "setVirtualBackgroundBlur": _setVirtualBackgroundBlur,
+ "setVirtualBackgroundBlur_MC": _setVirtualBackgroundBlur_MC,
+ "setVirtualBackgroundColor": _setVirtualBackgroundColor,
+ "setVirtualBackgroundColor_MC": _setVirtualBackgroundColor_MC,
+ "setVirtualBackgroundImage": _setVirtualBackgroundImage,
+ "setVirtualBackgroundImage_MC": _setVirtualBackgroundImage_MC,
+ "setVirtualBackgroundVideo": _setVirtualBackgroundVideo,
+ "setVirtualBackgroundVideo_MC": _setVirtualBackgroundVideo_MC,
+ "setVoiceBeautifierParameters": _setVoiceBeautifierParameters,
+ "setVoiceBeautifierPreset": _setVoiceBeautifierPreset,
+ "setVoiceConversionPreset": _setVoiceConversionPreset,
+ "setVoiceOnlyMode": _setVoiceOnlyMode,
+ "setVolumeOfEffect": _setVolumeOfEffect,
+ "setWebParametersBool": _setWebParametersBool,
+ "setWebParametersDouble": _setWebParametersDouble,
+ "setWebParametersInt": _setWebParametersInt,
+ "setWebParametersString": _setWebParametersString,
+ "setupLocalVideo": _setupLocalVideo,
+ "setupRemoteVideo": _setupRemoteVideo,
  "sigaction": _sigaction,
  "sigemptyset": _sigemptyset,
+ "startAudioDeviceLoopbackTest": _startAudioDeviceLoopbackTest,
+ "startAudioMixing": _startAudioMixing,
+ "startAudioMixing2": _startAudioMixing2,
+ "startAudioPlaybackDeviceTest": _startAudioPlaybackDeviceTest,
+ "startAudioRecording": _startAudioRecording,
+ "startAudioRecording2": _startAudioRecording2,
+ "startAudioRecordingDeviceTest": _startAudioRecordingDeviceTest,
+ "startAudioRecordingWithConfig": _startAudioRecordingWithConfig,
+ "startChannelMediaRelay": _startChannelMediaRelay,
+ "startChannelMediaRelay2": _startChannelMediaRelay2,
+ "startChannelMediaRelay2_WEBGL": _startChannelMediaRelay2_WEBGL,
+ "startChannelMediaRelay_WEBGL": _startChannelMediaRelay_WEBGL,
+ "startEchoTest": _startEchoTest,
+ "startEchoTest2": _startEchoTest2,
+ "startEchoTest3": _startEchoTest3,
+ "startLastmileProbeTest": _startLastmileProbeTest,
+ "startNewScreenCaptureForWeb": _startNewScreenCaptureForWeb,
+ "startNewScreenCaptureForWeb2": _startNewScreenCaptureForWeb2,
+ "startPreview": _startPreview,
+ "startRecording": _startRecording,
+ "startRecordingService": _startRecordingService,
+ "startRtmpStreamWithTranscoding": _startRtmpStreamWithTranscoding,
+ "startRtmpStreamWithTranscoding2": _startRtmpStreamWithTranscoding2,
+ "startRtmpStreamWithoutTranscoding": _startRtmpStreamWithoutTranscoding,
+ "startRtmpStreamWithoutTranscoding2": _startRtmpStreamWithoutTranscoding2,
+ "startScreenCaptureByDisplayId": _startScreenCaptureByDisplayId,
+ "startScreenCaptureByScreenRect": _startScreenCaptureByScreenRect,
+ "startScreenCaptureByWindowId": _startScreenCaptureByWindowId,
+ "startScreenCaptureForWeb": _startScreenCaptureForWeb,
+ "startScreenCaptureForWeb2": _startScreenCaptureForWeb2,
+ "startVideoDeviceTest": _startVideoDeviceTest,
+ "stopAllEffects": _stopAllEffects,
+ "stopAudioDeviceLoopbackTest": _stopAudioDeviceLoopbackTest,
+ "stopAudioMixing": _stopAudioMixing,
+ "stopAudioPlaybackDeviceTest": _stopAudioPlaybackDeviceTest,
+ "stopAudioRecording": _stopAudioRecording,
+ "stopAudioRecordingDeviceTest": _stopAudioRecordingDeviceTest,
+ "stopChannelMediaRelay": _stopChannelMediaRelay,
+ "stopChannelMediaRelay2": _stopChannelMediaRelay2,
+ "stopEchoTest": _stopEchoTest,
+ "stopEffect": _stopEffect,
+ "stopLastmileProbeTest": _stopLastmileProbeTest,
+ "stopNewScreenCaptureForWeb": _stopNewScreenCaptureForWeb,
+ "stopNewScreenCaptureForWeb2": _stopNewScreenCaptureForWeb2,
+ "stopPreview": _stopPreview,
+ "stopRecording": _stopRecording,
+ "stopRecordingService": _stopRecordingService,
+ "stopRtmpStream": _stopRtmpStream,
+ "stopRtmpStream2": _stopRtmpStream2,
+ "stopScreenCapture": _stopScreenCapture,
+ "stopScreenCapture2": _stopScreenCapture2,
+ "stopVideoDeviceTest": _stopVideoDeviceTest,
  "strftime": _strftime,
+ "switchCamera": _switchCamera,
+ "switchChannel": _switchChannel,
+ "switchChannel2": _switchChannel2,
+ "takeSnapshot": _takeSnapshot,
  "time": _time,
+ "unRegisterAudioRawDataObserver": _unRegisterAudioRawDataObserver,
+ "unRegisterMediaMetadataObserver": _unRegisterMediaMetadataObserver,
+ "unRegisterPacketObserver": _unRegisterPacketObserver,
+ "unRegisterVideoRawDataObserver": _unRegisterVideoRawDataObserver,
+ "unloadEffect": _unloadEffect,
+ "unpublish": _unpublish,
+ "updateChannelMediaRelay": _updateChannelMediaRelay,
+ "updateChannelMediaRelay2": _updateChannelMediaRelay2,
+ "updateChannelMediaRelay2_WEBGL": _updateChannelMediaRelay2_WEBGL,
+ "updateChannelMediaRelay_WEBGL": _updateChannelMediaRelay_WEBGL,
+ "updateLocalTexture": _updateLocalTexture,
+ "updateRemotePosition": _updateRemotePosition,
+ "updateRemoteTexture": _updateRemoteTexture,
+ "updateRemoteTexture_MC": _updateRemoteTexture_MC,
+ "updateRtmpTranscoding": _updateRtmpTranscoding,
+ "updateRtmpTranscoding2": _updateRtmpTranscoding2,
+ "updateScreenCaptureParameters": _updateScreenCaptureParameters,
+ "updateScreenCaptureRegion": _updateScreenCaptureRegion,
+ "updateSelfPosition": _updateSelfPosition,
+ "updateTexture": _updateTexture,
+ "updateVideoRawData": _updateVideoRawData,
+ "updateVideoRawData2": _updateVideoRawData2,
+ "uploadLogFile": _uploadLogFile,
  "utime": _utime
 };
 
@@ -14917,61 +17004,53 @@ var dynCall_d = Module["dynCall_d"] = createExportWrapper("dynCall_d");
 
 var dynCall_jiii = Module["dynCall_jiii"] = createExportWrapper("dynCall_jiii");
 
+var dynCall_vijii = Module["dynCall_vijii"] = createExportWrapper("dynCall_vijii");
+
+var dynCall_iiji = Module["dynCall_iiji"] = createExportWrapper("dynCall_iiji");
+
+var dynCall_diiii = Module["dynCall_diiii"] = createExportWrapper("dynCall_diiii");
+
+var dynCall_dii = Module["dynCall_dii"] = createExportWrapper("dynCall_dii");
+
+var dynCall_ifi = Module["dynCall_ifi"] = createExportWrapper("dynCall_ifi");
+
+var dynCall_idi = Module["dynCall_idi"] = createExportWrapper("dynCall_idi");
+
 var dynCall_iijji = Module["dynCall_iijji"] = createExportWrapper("dynCall_iijji");
 
 var dynCall_iiddi = Module["dynCall_iiddi"] = createExportWrapper("dynCall_iiddi");
 
 var dynCall_iiffi = Module["dynCall_iiffi"] = createExportWrapper("dynCall_iiffi");
 
+var dynCall_iiiiji = Module["dynCall_iiiiji"] = createExportWrapper("dynCall_iiiiji");
+
+var dynCall_viiiiiiiiiiiii = Module["dynCall_viiiiiiiiiiiii"] = createExportWrapper("dynCall_viiiiiiiiiiiii");
+
+var dynCall_iiiiij = Module["dynCall_iiiiij"] = createExportWrapper("dynCall_iiiiij");
+
+var dynCall_iiiiijiii = Module["dynCall_iiiiijiii"] = createExportWrapper("dynCall_iiiiijiii");
+
 var dynCall_diii = Module["dynCall_diii"] = createExportWrapper("dynCall_diii");
 
-var dynCall_viiiifii = Module["dynCall_viiiifii"] = createExportWrapper("dynCall_viiiifii");
-
-var dynCall_vijii = Module["dynCall_vijii"] = createExportWrapper("dynCall_vijii");
-
-var dynCall_viffffi = Module["dynCall_viffffi"] = createExportWrapper("dynCall_viffffi");
-
-var dynCall_iiji = Module["dynCall_iiji"] = createExportWrapper("dynCall_iiji");
+var dynCall_vfiii = Module["dynCall_vfiii"] = createExportWrapper("dynCall_vfiii");
 
 var dynCall_vidi = Module["dynCall_vidi"] = createExportWrapper("dynCall_vidi");
 
-var dynCall_iiiiifiiiii = Module["dynCall_iiiiifiiiii"] = createExportWrapper("dynCall_iiiiifiiiii");
+var dynCall_fffi = Module["dynCall_fffi"] = createExportWrapper("dynCall_fffi");
 
-var dynCall_ffi = Module["dynCall_ffi"] = createExportWrapper("dynCall_ffi");
+var dynCall_ijji = Module["dynCall_ijji"] = createExportWrapper("dynCall_ijji");
+
+var dynCall_jji = Module["dynCall_jji"] = createExportWrapper("dynCall_jji");
+
+var dynCall_jjji = Module["dynCall_jjji"] = createExportWrapper("dynCall_jjji");
 
 var dynCall_dddi = Module["dynCall_dddi"] = createExportWrapper("dynCall_dddi");
 
-var dynCall_iiiiiiiifiii = Module["dynCall_iiiiiiiifiii"] = createExportWrapper("dynCall_iiiiiiiifiii");
-
-var dynCall_viiiiiffi = Module["dynCall_viiiiiffi"] = createExportWrapper("dynCall_viiiiiffi");
+var dynCall_iidi = Module["dynCall_iidi"] = createExportWrapper("dynCall_iidi");
 
 var dynCall_jdi = Module["dynCall_jdi"] = createExportWrapper("dynCall_jdi");
 
 var dynCall_iji = Module["dynCall_iji"] = createExportWrapper("dynCall_iji");
-
-var dynCall_iiiiij = Module["dynCall_iiiiij"] = createExportWrapper("dynCall_iiiiij");
-
-var dynCall_vijjji = Module["dynCall_vijjji"] = createExportWrapper("dynCall_vijjji");
-
-var dynCall_jjji = Module["dynCall_jjji"] = createExportWrapper("dynCall_jjji");
-
-var dynCall_dii = Module["dynCall_dii"] = createExportWrapper("dynCall_dii");
-
-var dynCall_viijiiijiiii = Module["dynCall_viijiiijiiii"] = createExportWrapper("dynCall_viijiiijiiii");
-
-var dynCall_ijji = Module["dynCall_ijji"] = createExportWrapper("dynCall_ijji");
-
-var dynCall_viifiiiii = Module["dynCall_viifiiiii"] = createExportWrapper("dynCall_viifiiiii");
-
-var dynCall_iifii = Module["dynCall_iifii"] = createExportWrapper("dynCall_iifii");
-
-var dynCall_fffi = Module["dynCall_fffi"] = createExportWrapper("dynCall_fffi");
-
-var dynCall_jji = Module["dynCall_jji"] = createExportWrapper("dynCall_jji");
-
-var dynCall_diiii = Module["dynCall_diiii"] = createExportWrapper("dynCall_diiii");
-
-var dynCall_iidi = Module["dynCall_iidi"] = createExportWrapper("dynCall_iidi");
 
 var dynCall_viiiidi = Module["dynCall_viiiidi"] = createExportWrapper("dynCall_viiiidi");
 
@@ -14979,25 +17058,19 @@ var dynCall_iiiiiiidii = Module["dynCall_iiiiiiidii"] = createExportWrapper("dyn
 
 var dynCall_viiiidij = Module["dynCall_viiiidij"] = createExportWrapper("dynCall_viiiidij");
 
-var dynCall_ifi = Module["dynCall_ifi"] = createExportWrapper("dynCall_ifi");
+var dynCall_viffffi = Module["dynCall_viffffi"] = createExportWrapper("dynCall_viffffi");
 
-var dynCall_idi = Module["dynCall_idi"] = createExportWrapper("dynCall_idi");
+var dynCall_iiiiiiiifiii = Module["dynCall_iiiiiiiifiii"] = createExportWrapper("dynCall_iiiiiiiifiii");
 
-var dynCall_iiiiji = Module["dynCall_iiiiji"] = createExportWrapper("dynCall_iiiiji");
+var dynCall_viiiiiffi = Module["dynCall_viiiiiffi"] = createExportWrapper("dynCall_viiiiiffi");
 
-var dynCall_viiiiiiiiiiiii = Module["dynCall_viiiiiiiiiiiii"] = createExportWrapper("dynCall_viiiiiiiiiiiii");
+var dynCall_viifiiiii = Module["dynCall_viifiiiii"] = createExportWrapper("dynCall_viifiiiii");
 
-var dynCall_vfiii = Module["dynCall_vfiii"] = createExportWrapper("dynCall_vfiii");
+var dynCall_iifii = Module["dynCall_iifii"] = createExportWrapper("dynCall_iifii");
 
-var dynCall_viifffffi = Module["dynCall_viifffffi"] = createExportWrapper("dynCall_viifffffi");
+var dynCall_iiiiifiiiii = Module["dynCall_iiiiifiiiii"] = createExportWrapper("dynCall_iiiiifiiiii");
 
-var dynCall_fifi = Module["dynCall_fifi"] = createExportWrapper("dynCall_fifi");
-
-var dynCall_viiiiifffiii = Module["dynCall_viiiiifffiii"] = createExportWrapper("dynCall_viiiiifffiii");
-
-var dynCall_fiiiii = Module["dynCall_fiiiii"] = createExportWrapper("dynCall_fiiiii");
-
-var dynCall_viiiji = Module["dynCall_viiiji"] = createExportWrapper("dynCall_viiiji");
+var dynCall_ffi = Module["dynCall_ffi"] = createExportWrapper("dynCall_ffi");
 
 var dynCall_dji = Module["dynCall_dji"] = createExportWrapper("dynCall_dji");
 
@@ -15005,7 +17078,9 @@ var dynCall_vidiii = Module["dynCall_vidiii"] = createExportWrapper("dynCall_vid
 
 var dynCall_viiddi = Module["dynCall_viiddi"] = createExportWrapper("dynCall_viiddi");
 
-var dynCall_iiiiijiii = Module["dynCall_iiiiijiii"] = createExportWrapper("dynCall_iiiiijiii");
+var dynCall_vijjji = Module["dynCall_vijjji"] = createExportWrapper("dynCall_vijjji");
+
+var dynCall_viijiiijiiii = Module["dynCall_viijiiijiiii"] = createExportWrapper("dynCall_viijiiijiiii");
 
 var dynCall_iijiiii = Module["dynCall_iijiiii"] = createExportWrapper("dynCall_iijiiii");
 
@@ -15019,19 +17094,31 @@ var dynCall_iijjiiiiii = Module["dynCall_iijjiiiiii"] = createExportWrapper("dyn
 
 var dynCall_iiiijjii = Module["dynCall_iiiijjii"] = createExportWrapper("dynCall_iiiijjii");
 
-var dynCall_viiiiiiiiifi = Module["dynCall_viiiiiiiiifi"] = createExportWrapper("dynCall_viiiiiiiiifi");
-
 var dynCall_jijii = Module["dynCall_jijii"] = createExportWrapper("dynCall_jijii");
+
+var dynCall_viiiiiiiiifi = Module["dynCall_viiiiiiiiifi"] = createExportWrapper("dynCall_viiiiiiiiifi");
 
 var dynCall_fiiffi = Module["dynCall_fiiffi"] = createExportWrapper("dynCall_fiiffi");
 
 var dynCall_viiififii = Module["dynCall_viiififii"] = createExportWrapper("dynCall_viiififii");
 
+var dynCall_viiij = Module["dynCall_viiij"] = createExportWrapper("dynCall_viiij");
+
+var dynCall_viiiifi = Module["dynCall_viiiifi"] = createExportWrapper("dynCall_viiiifi");
+
+var dynCall_viiiji = Module["dynCall_viiiji"] = createExportWrapper("dynCall_viiiji");
+
+var dynCall_viifffffi = Module["dynCall_viifffffi"] = createExportWrapper("dynCall_viifffffi");
+
+var dynCall_fifi = Module["dynCall_fifi"] = createExportWrapper("dynCall_fifi");
+
+var dynCall_viiiiifffiii = Module["dynCall_viiiiifffiii"] = createExportWrapper("dynCall_viiiiifffiii");
+
+var dynCall_fiiiii = Module["dynCall_fiiiii"] = createExportWrapper("dynCall_fiiiii");
+
 var dynCall_vijji = Module["dynCall_vijji"] = createExportWrapper("dynCall_vijji");
 
 var dynCall_fiifii = Module["dynCall_fiifii"] = createExportWrapper("dynCall_fiifii");
-
-var dynCall_viiiifi = Module["dynCall_viiiifi"] = createExportWrapper("dynCall_viiiifi");
 
 var dynCall_jijj = Module["dynCall_jijj"] = createExportWrapper("dynCall_jijj");
 
@@ -15051,8 +17138,6 @@ var dynCall_viidiji = Module["dynCall_viidiji"] = createExportWrapper("dynCall_v
 
 var dynCall_viidjii = Module["dynCall_viidjii"] = createExportWrapper("dynCall_viidjii");
 
-var dynCall_viiij = Module["dynCall_viiij"] = createExportWrapper("dynCall_viiij");
-
 var dynCall_iiiiiiiiiiiiii = Module["dynCall_iiiiiiiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiiiiiiii");
 
 var dynCall_iiiiiiiiiiiiiii = Module["dynCall_iiiiiiiiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiiiiiiiii");
@@ -15069,6 +17154,8 @@ var dynCall_fiifi = Module["dynCall_fiifi"] = createExportWrapper("dynCall_fiifi
 
 var dynCall_iiidii = Module["dynCall_iiidii"] = createExportWrapper("dynCall_iiidii");
 
+var dynCall_viiiifii = Module["dynCall_viiiifii"] = createExportWrapper("dynCall_viiiifii");
+
 var dynCall_viijiiiiii = Module["dynCall_viijiiiiii"] = createExportWrapper("dynCall_viijiiiiii");
 
 var dynCall_vijiii = Module["dynCall_vijiii"] = createExportWrapper("dynCall_vijiii");
@@ -15081,7 +17168,85 @@ var dynCall_jiiiii = Module["dynCall_jiiiii"] = createExportWrapper("dynCall_jii
 
 var dynCall_jiiiiiiiiii = Module["dynCall_jiiiiiiiiii"] = createExportWrapper("dynCall_jiiiiiiiiii");
 
+var dynCall_viiiiiiiji = Module["dynCall_viiiiiiiji"] = createExportWrapper("dynCall_viiiiiiiji");
+
+var dynCall_viiiiiiiiji = Module["dynCall_viiiiiiiiji"] = createExportWrapper("dynCall_viiiiiiiiji");
+
+var dynCall_viiiiiiijii = Module["dynCall_viiiiiiijii"] = createExportWrapper("dynCall_viiiiiiijii");
+
+var dynCall_viiiiiiiijii = Module["dynCall_viiiiiiiijii"] = createExportWrapper("dynCall_viiiiiiiijii");
+
+var dynCall_viiiiiiiiiiiiiiiiiiddiddii = Module["dynCall_viiiiiiiiiiiiiiiiiiddiddii"] = createExportWrapper("dynCall_viiiiiiiiiiiiiiiiiiddiddii");
+
+var dynCall_viiiiji = Module["dynCall_viiiiji"] = createExportWrapper("dynCall_viiiiji");
+
+var dynCall_viiiiiiiiiiiiiiiiiiiddiddii = Module["dynCall_viiiiiiiiiiiiiiiiiiiddiddii"] = createExportWrapper("dynCall_viiiiiiiiiiiiiiiiiiiddiddii");
+
+var dynCall_viiiiiijii = Module["dynCall_viiiiiijii"] = createExportWrapper("dynCall_viiiiiijii");
+
+var dynCall_viiiiiiji = Module["dynCall_viiiiiiji"] = createExportWrapper("dynCall_viiiiiiji");
+
+var dynCall_viiiiiiiiiiiiiiiiiddiddii = Module["dynCall_viiiiiiiiiiiiiiiiiddiddii"] = createExportWrapper("dynCall_viiiiiiiiiiiiiiiiiddiddii");
+
+var dynCall_iiiidd = Module["dynCall_iiiidd"] = createExportWrapper("dynCall_iiiidd");
+
 var dynCall_ffffi = Module["dynCall_ffffi"] = createExportWrapper("dynCall_ffffi");
+
+var dynCall_iiiddi = Module["dynCall_iiiddi"] = createExportWrapper("dynCall_iiiddi");
+
+var dynCall_iiidddiiii = Module["dynCall_iiidddiiii"] = createExportWrapper("dynCall_iiidddiiii");
+
+var dynCall_iiidddidiii = Module["dynCall_iiidddidiii"] = createExportWrapper("dynCall_iiidddidiii");
+
+var dynCall_iiidi = Module["dynCall_iiidi"] = createExportWrapper("dynCall_iiidi");
+
+var dynCall_iiiiiddiii = Module["dynCall_iiiiiddiii"] = createExportWrapper("dynCall_iiiiiddiii");
+
+var dynCall_iiiiiddiiii = Module["dynCall_iiiiiddiiii"] = createExportWrapper("dynCall_iiiiiddiiii");
+
+var dynCall_iiiiddiii = Module["dynCall_iiiiddiii"] = createExportWrapper("dynCall_iiiiddiii");
+
+var dynCall_iiiiddiiii = Module["dynCall_iiiiddiiii"] = createExportWrapper("dynCall_iiiiddiiii");
+
+var dynCall_iiiiiiiiiiiiiiiiiiidiiiiiiidiiiiiiii = Module["dynCall_iiiiiiiiiiiiiiiiiiidiiiiiiidiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiiiiiiiiiiiiidiiiiiiidiiiiiiii");
+
+var dynCall_iiiiiiiiiiiiiiiiiiiidiiiiiiidiiiiiiii = Module["dynCall_iiiiiiiiiiiiiiiiiiiidiiiiiiidiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiiiiiiiiiiiiiidiiiiiiidiiiiiiii");
+
+var dynCall_iiiiiiiiiiiji = Module["dynCall_iiiiiiiiiiiji"] = createExportWrapper("dynCall_iiiiiiiiiiiji");
+
+var dynCall_iiiiiiijii = Module["dynCall_iiiiiiijii"] = createExportWrapper("dynCall_iiiiiiijii");
+
+var dynCall_iiiiiiiijii = Module["dynCall_iiiiiiiijii"] = createExportWrapper("dynCall_iiiiiiiijii");
+
+var dynCall_iiiffffi = Module["dynCall_iiiffffi"] = createExportWrapper("dynCall_iiiffffi");
+
+var dynCall_iiiiiiiiiiiiiiiiiiiii = Module["dynCall_iiiiiiiiiiiiiiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiiiiiiiiiiiiiii");
+
+var dynCall_viiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii = Module["dynCall_viiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"] = createExportWrapper("dynCall_viiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+
+var dynCall_viiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii = Module["dynCall_viiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"] = createExportWrapper("dynCall_viiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+
+var dynCall_iiiiiiiiiiiiiiiiiiiiidiiiiiiidiiiiiiii = Module["dynCall_iiiiiiiiiiiiiiiiiiiiidiiiiiiidiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiiiiiiiiiiiiiiidiiiiiiidiiiiiiii");
+
+var dynCall_iidddidiii = Module["dynCall_iidddidiii"] = createExportWrapper("dynCall_iidddidiii");
+
+var dynCall_iffi = Module["dynCall_iffi"] = createExportWrapper("dynCall_iffi");
+
+var dynCall_iiiiiiiijiii = Module["dynCall_iiiiiiiijiii"] = createExportWrapper("dynCall_iiiiiiiijiii");
+
+var dynCall_iiiiiiiiijiii = Module["dynCall_iiiiiiiiijiii"] = createExportWrapper("dynCall_iiiiiiiiijiii");
+
+var dynCall_iiiiiiiijiiii = Module["dynCall_iiiiiiiijiiii"] = createExportWrapper("dynCall_iiiiiiiijiiii");
+
+var dynCall_iiiiiiiiijiiii = Module["dynCall_iiiiiiiiijiiii"] = createExportWrapper("dynCall_iiiiiiiiijiiii");
+
+var dynCall_iiiiiiiiiiiiiiiiiiiddiddiiii = Module["dynCall_iiiiiiiiiiiiiiiiiiiddiddiiii"] = createExportWrapper("dynCall_iiiiiiiiiiiiiiiiiiiddiddiiii");
+
+var dynCall_iiiiiiiiiiiiiiiiiiii = Module["dynCall_iiiiiiiiiiiiiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiiiiiiiiiiiiii");
+
+var dynCall_iiiiiiiiiiiiiiiiiiiiddiddiiii = Module["dynCall_iiiiiiiiiiiiiiiiiiiiddiddiiii"] = createExportWrapper("dynCall_iiiiiiiiiiiiiiiiiiiiddiddiiii");
+
+var dynCall_vifffi = Module["dynCall_vifffi"] = createExportWrapper("dynCall_vifffi");
 
 var dynCall_vijjiiiii = Module["dynCall_vijjiiiii"] = createExportWrapper("dynCall_vijjiiiii");
 
@@ -15149,8 +17314,6 @@ var dynCall_vifiii = Module["dynCall_vifiii"] = createExportWrapper("dynCall_vif
 
 var dynCall_iifiifiii = Module["dynCall_iifiifiii"] = createExportWrapper("dynCall_iifiifiii");
 
-var dynCall_vifffi = Module["dynCall_vifffi"] = createExportWrapper("dynCall_vifffi");
-
 var dynCall_iifiiii = Module["dynCall_iifiiii"] = createExportWrapper("dynCall_iifiiii");
 
 var dynCall_viddi = Module["dynCall_viddi"] = createExportWrapper("dynCall_viddi");
@@ -15158,8 +17321,6 @@ var dynCall_viddi = Module["dynCall_viddi"] = createExportWrapper("dynCall_viddi
 var dynCall_vijjjji = Module["dynCall_vijjjji"] = createExportWrapper("dynCall_vijjjji");
 
 var dynCall_iijjjji = Module["dynCall_iijjjji"] = createExportWrapper("dynCall_iijjjji");
-
-var dynCall_iiidi = Module["dynCall_iiidi"] = createExportWrapper("dynCall_iiidi");
 
 var dynCall_iijjjjiii = Module["dynCall_iijjjjiii"] = createExportWrapper("dynCall_iijjjjiii");
 
@@ -15192,8 +17353,6 @@ var dynCall_vdii = Module["dynCall_vdii"] = createExportWrapper("dynCall_vdii");
 var dynCall_iiiiiji = Module["dynCall_iiiiiji"] = createExportWrapper("dynCall_iiiiiji");
 
 var dynCall_viiijii = Module["dynCall_viiijii"] = createExportWrapper("dynCall_viiijii");
-
-var dynCall_viiiiji = Module["dynCall_viiiiji"] = createExportWrapper("dynCall_viiiiji");
 
 var dynCall_viijiii = Module["dynCall_viijiii"] = createExportWrapper("dynCall_viijiii");
 
@@ -15230,8 +17389,6 @@ var dynCall_vffffffii = Module["dynCall_vffffffii"] = createExportWrapper("dynCa
 var dynCall_vffffii = Module["dynCall_vffffii"] = createExportWrapper("dynCall_vffffii");
 
 var dynCall_viiiifffi = Module["dynCall_viiiifffi"] = createExportWrapper("dynCall_viiiifffi");
-
-var dynCall_iffi = Module["dynCall_iffi"] = createExportWrapper("dynCall_iffi");
 
 var dynCall_fffifffi = Module["dynCall_fffifffi"] = createExportWrapper("dynCall_fffifffi");
 
@@ -15431,8 +17588,6 @@ var dynCall_ddidi = Module["dynCall_ddidi"] = createExportWrapper("dynCall_ddidi
 
 var dynCall_viddii = Module["dynCall_viddii"] = createExportWrapper("dynCall_viddii");
 
-var dynCall_iiiddi = Module["dynCall_iiiddi"] = createExportWrapper("dynCall_iiiddi");
-
 var dynCall_viddiiii = Module["dynCall_viddiiii"] = createExportWrapper("dynCall_viddiiii");
 
 var dynCall_vijiiiiiii = Module["dynCall_vijiiiiiii"] = createExportWrapper("dynCall_vijiiiiiii");
@@ -15468,10 +17623,6 @@ var dynCall_fdi = Module["dynCall_fdi"] = createExportWrapper("dynCall_fdi");
 var dynCall_dfi = Module["dynCall_dfi"] = createExportWrapper("dynCall_dfi");
 
 var dynCall_jidii = Module["dynCall_jidii"] = createExportWrapper("dynCall_jidii");
-
-var dynCall_viiiiiiiji = Module["dynCall_viiiiiiiji"] = createExportWrapper("dynCall_viiiiiiiji");
-
-var dynCall_viiiiiiiiji = Module["dynCall_viiiiiiiiji"] = createExportWrapper("dynCall_viiiiiiiiji");
 
 var dynCall_viiiiiiiiiji = Module["dynCall_viiiiiiiiiji"] = createExportWrapper("dynCall_viiiiiiiiiji");
 
@@ -15526,6 +17677,14 @@ var dynCall_viijiijiii = Module["dynCall_viijiijiii"] = createExportWrapper("dyn
 var dynCall_viiiijiiii = Module["dynCall_viiiijiiii"] = createExportWrapper("dynCall_viiiijiiii");
 
 var dynCall_viijjii = Module["dynCall_viijjii"] = createExportWrapper("dynCall_viijjii");
+
+var dynCall_viiiiiiiiiiiiiiiiiiddiddi = Module["dynCall_viiiiiiiiiiiiiiiiiiddiddi"] = createExportWrapper("dynCall_viiiiiiiiiiiiiiiiiiddiddi");
+
+var dynCall_viiiiiiiiiiiiiiiiiddiddi = Module["dynCall_viiiiiiiiiiiiiiiiiddiddi"] = createExportWrapper("dynCall_viiiiiiiiiiiiiiiiiddiddi");
+
+var dynCall_viiiiiij = Module["dynCall_viiiiiij"] = createExportWrapper("dynCall_viiiiiij");
+
+var dynCall_viiiiiiij = Module["dynCall_viiiiiiij"] = createExportWrapper("dynCall_viiiiiiij");
 
 var dynCall_iiiiijii = Module["dynCall_iiiiijii"] = createExportWrapper("dynCall_iiiiijii");
 
@@ -15775,6 +17934,17 @@ function invoke_viiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) {
  }
 }
 
+function invoke_viiiiiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15) {
+ var sp = stackSave();
+ try {
+  dynCall_viiiiiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
 function invoke_viiiiii(index, a1, a2, a3, a4, a5, a6) {
  var sp = stackSave();
  try {
@@ -15863,10 +18033,65 @@ function invoke_viifi(index, a1, a2, a3, a4) {
  }
 }
 
+function invoke_viiff(index, a1, a2, a3, a4) {
+ var sp = stackSave();
+ try {
+  dynCall_viiff(index, a1, a2, a3, a4);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_vifi(index, a1, a2, a3) {
+ var sp = stackSave();
+ try {
+  dynCall_vifi(index, a1, a2, a3);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
 function invoke_fi(index, a1) {
  var sp = stackSave();
  try {
   return dynCall_fi(index, a1);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_iiifi(index, a1, a2, a3, a4) {
+ var sp = stackSave();
+ try {
+  return dynCall_iiifi(index, a1, a2, a3, a4);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_diiii(index, a1, a2, a3, a4) {
+ var sp = stackSave();
+ try {
+  return dynCall_diiii(index, a1, a2, a3, a4);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_fiiii(index, a1, a2, a3, a4) {
+ var sp = stackSave();
+ try {
+  return dynCall_fiiii(index, a1, a2, a3, a4);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -15885,10 +18110,65 @@ function invoke_viiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8) {
  }
 }
 
-function invoke_viidi(index, a1, a2, a3, a4) {
+function invoke_dii(index, a1, a2) {
  var sp = stackSave();
  try {
-  dynCall_viidi(index, a1, a2, a3, a4);
+  return dynCall_dii(index, a1, a2);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_ifi(index, a1, a2) {
+ var sp = stackSave();
+ try {
+  return dynCall_ifi(index, a1, a2);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_idi(index, a1, a2) {
+ var sp = stackSave();
+ try {
+  return dynCall_idi(index, a1, a2);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12) {
+ var sp = stackSave();
+ try {
+  dynCall_viiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viiiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13) {
+ var sp = stackSave();
+ try {
+  dynCall_viiiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_vfiii(index, a1, a2, a3, a4) {
+ var sp = stackSave();
+ try {
+  dynCall_vfiii(index, a1, a2, a3, a4);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -15907,10 +18187,98 @@ function invoke_vidi(index, a1, a2, a3) {
  }
 }
 
-function invoke_fiiii(index, a1, a2, a3, a4) {
+function invoke_fffi(index, a1, a2, a3) {
  var sp = stackSave();
  try {
-  return dynCall_fiiii(index, a1, a2, a3, a4);
+  return dynCall_fffi(index, a1, a2, a3);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_dddi(index, a1, a2, a3) {
+ var sp = stackSave();
+ try {
+  return dynCall_dddi(index, a1, a2, a3);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_iidi(index, a1, a2, a3) {
+ var sp = stackSave();
+ try {
+  return dynCall_iidi(index, a1, a2, a3);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_iifi(index, a1, a2, a3) {
+ var sp = stackSave();
+ try {
+  return dynCall_iifi(index, a1, a2, a3);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viiffi(index, a1, a2, a3, a4, a5) {
+ var sp = stackSave();
+ try {
+  dynCall_viiffi(index, a1, a2, a3, a4, a5);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viidi(index, a1, a2, a3, a4) {
+ var sp = stackSave();
+ try {
+  dynCall_viidi(index, a1, a2, a3, a4);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viiiidi(index, a1, a2, a3, a4, a5, a6) {
+ var sp = stackSave();
+ try {
+  dynCall_viiiidi(index, a1, a2, a3, a4, a5, a6);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_iiiiiiidii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+ var sp = stackSave();
+ try {
+  return dynCall_iiiiiiidii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viffffi(index, a1, a2, a3, a4, a5, a6) {
+ var sp = stackSave();
+ try {
+  dynCall_viffffi(index, a1, a2, a3, a4, a5, a6);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -15940,32 +18308,10 @@ function invoke_viiifi(index, a1, a2, a3, a4, a5) {
  }
 }
 
-function invoke_vifi(index, a1, a2, a3) {
+function invoke_iiiiiiiifiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11) {
  var sp = stackSave();
  try {
-  dynCall_vifi(index, a1, a2, a3);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_viffffi(index, a1, a2, a3, a4, a5, a6) {
- var sp = stackSave();
- try {
-  dynCall_viffffi(index, a1, a2, a3, a4, a5, a6);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_iiiiifiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) {
- var sp = stackSave();
- try {
-  return dynCall_iiiiifiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
+  return dynCall_iiiiiiiifiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -15984,28 +18330,6 @@ function invoke_viiiiifi(index, a1, a2, a3, a4, a5, a6, a7) {
  }
 }
 
-function invoke_viffi(index, a1, a2, a3, a4) {
- var sp = stackSave();
- try {
-  dynCall_viffi(index, a1, a2, a3, a4);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_ffi(index, a1, a2) {
- var sp = stackSave();
- try {
-  return dynCall_ffi(index, a1, a2);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
 function invoke_viiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11) {
  var sp = stackSave();
  try {
@@ -16017,54 +18341,10 @@ function invoke_viiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11
  }
 }
 
-function invoke_dddi(index, a1, a2, a3) {
- var sp = stackSave();
- try {
-  return dynCall_dddi(index, a1, a2, a3);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_iiiiiiiifiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11) {
- var sp = stackSave();
- try {
-  return dynCall_iiiiiiiifiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
 function invoke_viiiiiffi(index, a1, a2, a3, a4, a5, a6, a7, a8) {
  var sp = stackSave();
  try {
   dynCall_viiiiiffi(index, a1, a2, a3, a4, a5, a6, a7, a8);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_viiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12) {
- var sp = stackSave();
- try {
-  dynCall_viiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_dii(index, a1, a2) {
- var sp = stackSave();
- try {
-  return dynCall_dii(index, a1, a2);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16105,10 +18385,10 @@ function invoke_vfi(index, a1, a2) {
  }
 }
 
-function invoke_fffi(index, a1, a2, a3) {
+function invoke_iiiiifiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) {
  var sp = stackSave();
  try {
-  return dynCall_fffi(index, a1, a2, a3);
+  return dynCall_iiiiifiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16116,10 +18396,10 @@ function invoke_fffi(index, a1, a2, a3) {
  }
 }
 
-function invoke_iidi(index, a1, a2, a3) {
+function invoke_viffi(index, a1, a2, a3, a4) {
  var sp = stackSave();
  try {
-  return dynCall_iidi(index, a1, a2, a3);
+  dynCall_viffi(index, a1, a2, a3, a4);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16127,10 +18407,10 @@ function invoke_iidi(index, a1, a2, a3) {
  }
 }
 
-function invoke_iifi(index, a1, a2, a3) {
+function invoke_ffi(index, a1, a2) {
  var sp = stackSave();
  try {
-  return dynCall_iifi(index, a1, a2, a3);
+  return dynCall_ffi(index, a1, a2);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16138,10 +18418,10 @@ function invoke_iifi(index, a1, a2, a3) {
  }
 }
 
-function invoke_diiii(index, a1, a2, a3, a4) {
+function invoke_viidii(index, a1, a2, a3, a4, a5) {
  var sp = stackSave();
  try {
-  return dynCall_diiii(index, a1, a2, a3, a4);
+  dynCall_viidii(index, a1, a2, a3, a4, a5);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16149,10 +18429,10 @@ function invoke_diiii(index, a1, a2, a3, a4) {
  }
 }
 
-function invoke_viiiidi(index, a1, a2, a3, a4, a5, a6) {
+function invoke_vidiii(index, a1, a2, a3, a4, a5) {
  var sp = stackSave();
  try {
-  dynCall_viiiidi(index, a1, a2, a3, a4, a5, a6);
+  dynCall_vidiii(index, a1, a2, a3, a4, a5);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16160,10 +18440,10 @@ function invoke_viiiidi(index, a1, a2, a3, a4, a5, a6) {
  }
 }
 
-function invoke_iiiiiiidii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+function invoke_viiddi(index, a1, a2, a3, a4, a5) {
  var sp = stackSave();
  try {
-  return dynCall_iiiiiiidii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9);
+  dynCall_viiddi(index, a1, a2, a3, a4, a5);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16171,10 +18451,10 @@ function invoke_iiiiiiidii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
  }
 }
 
-function invoke_ifi(index, a1, a2) {
+function invoke_viifii(index, a1, a2, a3, a4, a5) {
  var sp = stackSave();
  try {
-  return dynCall_ifi(index, a1, a2);
+  dynCall_viifii(index, a1, a2, a3, a4, a5);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16182,10 +18462,10 @@ function invoke_ifi(index, a1, a2) {
  }
 }
 
-function invoke_idi(index, a1, a2) {
+function invoke_viifffi(index, a1, a2, a3, a4, a5, a6) {
  var sp = stackSave();
  try {
-  return dynCall_idi(index, a1, a2);
+  dynCall_viifffi(index, a1, a2, a3, a4, a5, a6);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16193,10 +18473,10 @@ function invoke_idi(index, a1, a2) {
  }
 }
 
-function invoke_viiiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13) {
+function invoke_di(index, a1) {
  var sp = stackSave();
  try {
-  dynCall_viiiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13);
+  return dynCall_di(index, a1);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16204,10 +18484,32 @@ function invoke_viiiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a
  }
 }
 
-function invoke_vfiii(index, a1, a2, a3, a4) {
+function invoke_iiifii(index, a1, a2, a3, a4, a5) {
  var sp = stackSave();
  try {
-  dynCall_vfiii(index, a1, a2, a3, a4);
+  return dynCall_iiifii(index, a1, a2, a3, a4, a5);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viiiiiiiiifi(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11) {
+ var sp = stackSave();
+ try {
+  dynCall_viiiiiiiiifi(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viiiifi(index, a1, a2, a3, a4, a5, a6) {
+ var sp = stackSave();
+ try {
+  dynCall_viiiifi(index, a1, a2, a3, a4, a5, a6);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16259,10 +18561,10 @@ function invoke_fiiiii(index, a1, a2, a3, a4, a5) {
  }
 }
 
-function invoke_viifii(index, a1, a2, a3, a4, a5) {
+function invoke_viiiiiiiiiiiiiiiiiiddiddii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25) {
  var sp = stackSave();
  try {
-  dynCall_viifii(index, a1, a2, a3, a4, a5);
+  dynCall_viiiiiiiiiiiiiiiiiiddiddii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16270,10 +18572,10 @@ function invoke_viifii(index, a1, a2, a3, a4, a5) {
  }
 }
 
-function invoke_viifffi(index, a1, a2, a3, a4, a5, a6) {
+function invoke_viiiiiiiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17) {
  var sp = stackSave();
  try {
-  dynCall_viifffi(index, a1, a2, a3, a4, a5, a6);
+  dynCall_viiiiiiiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16281,10 +18583,10 @@ function invoke_viifffi(index, a1, a2, a3, a4, a5, a6) {
  }
 }
 
-function invoke_viidii(index, a1, a2, a3, a4, a5) {
+function invoke_viiiiiiiiiiiiiiiiiddiddii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24) {
  var sp = stackSave();
  try {
-  dynCall_viidii(index, a1, a2, a3, a4, a5);
+  dynCall_viiiiiiiiiiiiiiiiiddiddii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16292,10 +18594,10 @@ function invoke_viidii(index, a1, a2, a3, a4, a5) {
  }
 }
 
-function invoke_vidiii(index, a1, a2, a3, a4, a5) {
+function invoke_viiiiiiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16) {
  var sp = stackSave();
  try {
-  dynCall_vidiii(index, a1, a2, a3, a4, a5);
+  dynCall_viiiiiiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16303,10 +18605,10 @@ function invoke_vidiii(index, a1, a2, a3, a4, a5) {
  }
 }
 
-function invoke_viiddi(index, a1, a2, a3, a4, a5) {
+function invoke_viiiiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14) {
  var sp = stackSave();
  try {
-  dynCall_viiddi(index, a1, a2, a3, a4, a5);
+  dynCall_viiiiiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16314,76 +18616,10 @@ function invoke_viiddi(index, a1, a2, a3, a4, a5) {
  }
 }
 
-function invoke_viiiiiiiiifi(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11) {
+function invoke_iiiidd(index, a1, a2, a3, a4, a5) {
  var sp = stackSave();
  try {
-  dynCall_viiiiiiiiifi(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_iiifi(index, a1, a2, a3, a4) {
- var sp = stackSave();
- try {
-  return dynCall_iiifi(index, a1, a2, a3, a4);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_di(index, a1) {
- var sp = stackSave();
- try {
-  return dynCall_di(index, a1);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_iiifii(index, a1, a2, a3, a4, a5) {
- var sp = stackSave();
- try {
-  return dynCall_iiifii(index, a1, a2, a3, a4, a5);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_viiiifi(index, a1, a2, a3, a4, a5, a6) {
- var sp = stackSave();
- try {
-  dynCall_viiiifi(index, a1, a2, a3, a4, a5, a6);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_viiffi(index, a1, a2, a3, a4, a5) {
- var sp = stackSave();
- try {
-  dynCall_viiffi(index, a1, a2, a3, a4, a5);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_viiff(index, a1, a2, a3, a4) {
- var sp = stackSave();
- try {
-  dynCall_viiff(index, a1, a2, a3, a4);
+  return dynCall_iiiidd(index, a1, a2, a3, a4, a5);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16523,6 +18759,39 @@ function invoke_iiiiij(index, a1, a2, a3, a4, a5, a6) {
  }
 }
 
+function invoke_viiiji(index, a1, a2, a3, a4, a5, a6) {
+ var sp = stackSave();
+ try {
+  dynCall_viiiji(index, a1, a2, a3, a4, a5, a6);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_jiii(index, a1, a2, a3) {
+ var sp = stackSave();
+ try {
+  return dynCall_jiii(index, a1, a2, a3);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_iiji(index, a1, a2, a3, a4) {
+ var sp = stackSave();
+ try {
+  return dynCall_iiji(index, a1, a2, a3, a4);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
 function invoke_viiji(index, a1, a2, a3, a4, a5) {
  var sp = stackSave();
  try {
@@ -16545,10 +18814,153 @@ function invoke_viji(index, a1, a2, a3, a4) {
  }
 }
 
-function invoke_jiii(index, a1, a2, a3) {
+function invoke_vijii(index, a1, a2, a3, a4, a5) {
  var sp = stackSave();
  try {
-  return dynCall_jiii(index, a1, a2, a3);
+  dynCall_vijii(index, a1, a2, a3, a4, a5);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_jjii(index, a1, a2, a3, a4) {
+ var sp = stackSave();
+ try {
+  return dynCall_jjii(index, a1, a2, a3, a4);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_iiiiijiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+ var sp = stackSave();
+ try {
+  return dynCall_iiiiijiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_ijji(index, a1, a2, a3, a4, a5) {
+ var sp = stackSave();
+ try {
+  return dynCall_ijji(index, a1, a2, a3, a4, a5);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_jji(index, a1, a2, a3) {
+ var sp = stackSave();
+ try {
+  return dynCall_jji(index, a1, a2, a3);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_jjji(index, a1, a2, a3, a4, a5) {
+ var sp = stackSave();
+ try {
+  return dynCall_jjji(index, a1, a2, a3, a4, a5);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_jdi(index, a1, a2) {
+ var sp = stackSave();
+ try {
+  return dynCall_jdi(index, a1, a2);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_iji(index, a1, a2, a3) {
+ var sp = stackSave();
+ try {
+  return dynCall_iji(index, a1, a2, a3);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viij(index, a1, a2, a3, a4) {
+ var sp = stackSave();
+ try {
+  dynCall_viij(index, a1, a2, a3, a4);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_jiiji(index, a1, a2, a3, a4, a5) {
+ var sp = stackSave();
+ try {
+  return dynCall_jiiji(index, a1, a2, a3, a4, a5);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viiiidij(index, a1, a2, a3, a4, a5, a6, a7, a8) {
+ var sp = stackSave();
+ try {
+  dynCall_viiiidij(index, a1, a2, a3, a4, a5, a6, a7, a8);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_dji(index, a1, a2, a3) {
+ var sp = stackSave();
+ try {
+  return dynCall_dji(index, a1, a2, a3);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_vijjji(index, a1, a2, a3, a4, a5, a6, a7, a8) {
+ var sp = stackSave();
+ try {
+  dynCall_vijjji(index, a1, a2, a3, a4, a5, a6, a7, a8);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viijiiijiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13) {
+ var sp = stackSave();
+ try {
+  dynCall_viijiiijiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16571,17 +18983,6 @@ function invoke_iiiijjii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
  var sp = stackSave();
  try {
   return dynCall_iiiijjii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_vijii(index, a1, a2, a3, a4, a5) {
- var sp = stackSave();
- try {
-  dynCall_vijii(index, a1, a2, a3, a4, a5);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16622,10 +19023,10 @@ function invoke_iijiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
  }
 }
 
-function invoke_jjii(index, a1, a2, a3, a4) {
+function invoke_jijii(index, a1, a2, a3, a4, a5) {
  var sp = stackSave();
  try {
-  return dynCall_jjii(index, a1, a2, a3, a4);
+  return dynCall_jijii(index, a1, a2, a3, a4, a5);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16633,120 +19034,10 @@ function invoke_jjii(index, a1, a2, a3, a4) {
  }
 }
 
-function invoke_iiji(index, a1, a2, a3, a4) {
+function invoke_jiji(index, a1, a2, a3, a4) {
  var sp = stackSave();
  try {
-  return dynCall_iiji(index, a1, a2, a3, a4);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_jdi(index, a1, a2) {
- var sp = stackSave();
- try {
-  return dynCall_jdi(index, a1, a2);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_iji(index, a1, a2, a3) {
- var sp = stackSave();
- try {
-  return dynCall_iji(index, a1, a2, a3);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_jjji(index, a1, a2, a3, a4, a5) {
- var sp = stackSave();
- try {
-  return dynCall_jjji(index, a1, a2, a3, a4, a5);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_vijjji(index, a1, a2, a3, a4, a5, a6, a7, a8) {
- var sp = stackSave();
- try {
-  dynCall_vijjji(index, a1, a2, a3, a4, a5, a6, a7, a8);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_jiiji(index, a1, a2, a3, a4, a5) {
- var sp = stackSave();
- try {
-  return dynCall_jiiji(index, a1, a2, a3, a4, a5);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_viijiiijiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13) {
- var sp = stackSave();
- try {
-  dynCall_viijiiijiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_ijji(index, a1, a2, a3, a4, a5) {
- var sp = stackSave();
- try {
-  return dynCall_ijji(index, a1, a2, a3, a4, a5);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_jji(index, a1, a2, a3) {
- var sp = stackSave();
- try {
-  return dynCall_jji(index, a1, a2, a3);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_viiiidij(index, a1, a2, a3, a4, a5, a6, a7, a8) {
- var sp = stackSave();
- try {
-  dynCall_viiiidij(index, a1, a2, a3, a4, a5, a6, a7, a8);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_viij(index, a1, a2, a3, a4) {
- var sp = stackSave();
- try {
-  dynCall_viij(index, a1, a2, a3, a4);
+  return dynCall_jiji(index, a1, a2, a3, a4);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16765,54 +19056,10 @@ function invoke_iijji(index, a1, a2, a3, a4, a5, a6) {
  }
 }
 
-function invoke_viiiji(index, a1, a2, a3, a4, a5, a6) {
+function invoke_viiij(index, a1, a2, a3, a4, a5) {
  var sp = stackSave();
  try {
-  dynCall_viiiji(index, a1, a2, a3, a4, a5, a6);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_dji(index, a1, a2, a3) {
- var sp = stackSave();
- try {
-  return dynCall_dji(index, a1, a2, a3);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_iiiiijiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
- var sp = stackSave();
- try {
-  return dynCall_iiiiijiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_jijii(index, a1, a2, a3, a4, a5) {
- var sp = stackSave();
- try {
-  return dynCall_jijii(index, a1, a2, a3, a4, a5);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_jiji(index, a1, a2, a3, a4) {
- var sp = stackSave();
- try {
-  return dynCall_jiji(index, a1, a2, a3, a4);
+  dynCall_viiij(index, a1, a2, a3, a4, a5);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16857,17 +19104,6 @@ function invoke_vji(index, a1, a2, a3) {
  var sp = stackSave();
  try {
   dynCall_vji(index, a1, a2, a3);
- } catch (e) {
-  stackRestore(sp);
-  if (e !== e + 0 && e !== "longjmp") throw e;
-  _setThrew(1, 0);
- }
-}
-
-function invoke_viiij(index, a1, a2, a3, a4, a5) {
- var sp = stackSave();
- try {
-  dynCall_viiij(index, a1, a2, a3, a4, a5);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -16945,6 +19181,50 @@ function invoke_jiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) {
  var sp = stackSave();
  try {
   return dynCall_jiiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viiiiiijii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) {
+ var sp = stackSave();
+ try {
+  dynCall_viiiiiijii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viiiiiiijii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11) {
+ var sp = stackSave();
+ try {
+  dynCall_viiiiiiijii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viiiiiiji(index, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+ var sp = stackSave();
+ try {
+  dynCall_viiiiiiji(index, a1, a2, a3, a4, a5, a6, a7, a8, a9);
+ } catch (e) {
+  stackRestore(sp);
+  if (e !== e + 0 && e !== "longjmp") throw e;
+  _setThrew(1, 0);
+ }
+}
+
+function invoke_viiiiiiiji(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) {
+ var sp = stackSave();
+ try {
+  dynCall_viiiiiiiji(index, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
  } catch (e) {
   stackRestore(sp);
   if (e !== e + 0 && e !== "longjmp") throw e;
@@ -18045,6 +20325,14 @@ if (!Object.getOwnPropertyDescriptor(Module, "IDBFS")) Module["IDBFS"] = functio
 
 if (!Object.getOwnPropertyDescriptor(Module, "webSocketInstances")) Module["webSocketInstances"] = function() {
  abort("'webSocketInstances' was not exported. add it to EXPORTED_RUNTIME_METHODS (see the FAQ)");
+};
+
+if (!Object.getOwnPropertyDescriptor(Module, "remoteVideoInstances")) Module["remoteVideoInstances"] = function() {
+ abort("'remoteVideoInstances' was not exported. add it to EXPORTED_RUNTIME_METHODS (see the FAQ)");
+};
+
+if (!Object.getOwnPropertyDescriptor(Module, "localVideo")) Module["localVideo"] = function() {
+ abort("'localVideo' was not exported. add it to EXPORTED_RUNTIME_METHODS (see the FAQ)");
 };
 
 if (!Object.getOwnPropertyDescriptor(Module, "emscriptenWebGLGetIndexed")) Module["emscriptenWebGLGetIndexed"] = function() {
