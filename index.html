@@ -6,27 +6,6 @@
     <title>Unity WebGL Player | Web3</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico" />
     <link rel="stylesheet" href="TemplateData/style.css" />
-    <script src="AgoraWebSDK/libs/agora-extension-virtual-background.js"></script>
-    <script src="AgoraWebSDK/libs/virtualbackground.js"></script>
-    <script src="AgoraWebSDK/libs/databuilder.js"></script>
-    <script src="AgoraWebSDK/libs/clientmanager.js"></script>
-    <script src="AgoraWebSDK/libs/wglwrapper.js"></script>
-    <script src="AgoraWebSDK/libs/audioeffects.js"></script>
-    <script src="AgoraWebSDK/libs/eventmanager.js"></script>
-    <script src="AgoraWebSDK/libs/engineglobals.js"></script>
-    <script src="AgoraWebSDK/libs/watermark.js"></script>
-    <script src="AgoraWebSDK/libs/customvideo.js"></script>
-    <script src="AgoraWebSDK/libs/agorachannel.js"></script>
-    <script src="AgoraWebSDK/libs/multichannel.js"></script>
-    <script src="AgoraWebSDK/libs/audiosystem.js"></script>
-    <script src="AgoraWebSDK/libs/testing.js"></script>
-    <script src="AgoraWebSDK/libs/agorautils.js"></script>
-    <script src="AgoraWebSDK/libs/audiomixing.js"></script>
-    <script src="AgoraWebSDK/agorartcenginev2.js"></script>
-    <script src="AgoraWebSDK/vendor/materialize.min.js"></script>
-    <script src="AgoraRTC_N.js"></script>
-    <script src="AgoraWebSDK/libs/spatial-audio-main.js" type="module"></script>
-    <script src="AgoraWebSDK/vendor/jquery.min.js"></script>
   </head>
 
   <body>
@@ -47,46 +26,7 @@
       </div>
     </div>
 
-    <canvas
-      id="inMem_Canvas"
-      height="450"
-      width="450"
-      style="display: none"
-    ></canvas>
-    <canvas
-      id="myCanvas"
-      height="450"
-      width="450"
-      style="display: none"
-    ></canvas>
-
-    <div>
-      <div id="client-stats" class="stats"></div>
-      <div class="row video-group">
-        <div class="col">
-          <p id="local-player-name" class="player-name"></p>
-          <div class="player-with-stats">
-            <div id="local-player" class="player"></div>
-            <div id="local-stats" class="stream-stats stats"></div>
-          </div>
-        </div>
-        <div class="w-100"></div>
-        <div class="col">
-          <div id="remote-playerlist"></div>
-        </div>
-      </div>
-    </div>
-
     <script>
-      var unityInstance;
-      var mainCanvas = document.getElementById("myCanvas");
-      var mainContext = mainCanvas.getContext("2d");
-      var inMemCanvas = document.getElementById("inMem_Canvas");
-      var inMemContext = inMemCanvas.getContext("2d");
-      var canvasWidth = mainCanvas.width;
-      var canvasHeight = mainCanvas.height;
-      var angle = 0;
-
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var loadingBar = document.querySelector("#unity-loading-bar");
